@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8" />
+	<title>chat</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<style>
+		body{
+			font-family: "微軟正黑體";
+			font-size: 20px;
+		}
+		#chat{
+			height: 300px;
+			
+			overflow: auto;
+		}
+		#chatWrap{
+			display: none;
+			width: 500px;
+			border: 1px solid black;
+			padding: 10px;
+		}
+		#topicWrap{
+			background: #009688;
+			margin-top: 30px;
+			height: 300px;
+			
+		}
+		.error{
+			color: red;
+		}
+		.whisper{
+			color: gray;
+			font-style: italic;
+		}
+		.topic{
+			margin: 10px;
+			padding: 5px;
+			background: #B2DFDB;
+			display: inline-block;
+			font-size: 20px;
+			border-radius: 5px;
+		}
+		.topic:hover, #back-btn:hover{
+			cursor: pointer;
+		}
+		#back-btn{
+			background: #80DEEA;
+			padding: 10px;
+			border-radius: 5px;
+			display: inline-block;
+		}
+		.You-msg{
+			font-weight: bold;
+			color: blue;
+		}
+		.stranger-msg{
+			font-weight: bold;
+			color:red;
+		}
+	</style>
+
+	
+</head>
+<body>
+
+	
+	<div id="createWrap">
+		<form id="createTopic">
+			<input size="35" id="inputTopic"  autocomplete="off"/>
+			<input type="submit" value="新增主題"/>
+		</form>
+	</div>
+	
+	<div id="topicWrap">
+		<div id="topics"></div>
+	</div>
+	
+	<div id="chatWrap">
+		<div id="chat"></div>
+		<form id="send-message">
+			<input size="35" id="message" autocomplete="off" disabled />
+			<input type="submit" value="傳送"/>
+		</form>
+	</div>
+	
+	<script src="http://code.jquery.com/jquery-latest.min.js"></script>
+	<script src="/socket.io/socket.io.js"></script>
+	<script>
+		jQuery(function($){
+			var socket = io.connect();
+			var $topicForm = $('#createTopic');
+			var $inputTopic = $('#inputTopic');
+			var $msgForm = $('#send-message');
+			var $msgBox = $('#message');
+			var $chat = $('#chat');
+			var $topics = $('#topics');
+			
+			$topicForm.submit(function(e){
+				e.preventDefault();
+				if( $inputTopic.val().length > 30){
+					alert('請輸入30字以內！');
+				}
+				else if($inputTopic.val()!=''){
+					var topicStr = $inputTopic.val();
+					socket.emit('new topic', $inputTopic.val(), function(data){
+						console.log("topic created!");
+						$('#createWrap').hide();
+						$('#topicWrap').hide();
+						$('#chatWrap').show();
+						
+						$chat.html('<b>'+topicStr+'</b><br/>等待陌生人...<br/>');
+					});
+				}
+				
+				$inputTopic.val('');
+			});
+			
+			socket.on('topics', function(data){
+				var html = '';
+				var len = Object.keys(data).length;
+				var ids = Object.keys(data);
+				
+				for(i=0; i<len; i++){
+					var tpc = data[ids[i]];
+					html += '<div class="topic" id="'+ ids[i] +'">' + escapeHtml(tpc) + '</div>';
+				}
+				$topics.html(html);
+			});
+			
+			$('#topics').on('click','div.topic', function(){
+				console.log("a topic clicked!");
+				var id = $(this).prop('id');
+				socket.emit('topic clicked', id, function(data){
+					$('#createWrap').hide();
+					$('#topicWrap').hide();
+					$('#chatWrap').show();
+					$chat.html('您已進入：' + data + '<br/>');
+					$msgBox.prop('disabled', false);
+				});
+			});
+			
+			socket.on('guest coming', function(data){/**主題被連入*/
+				$msgBox.prop('disabled', false);
+				$chat.append('有人來囉~開始聊天吧 :D<br/>');
+			});
+			$msgForm.submit(function(e){/**發訊息*/
+				e.preventDefault();
+				if($msgBox.val()!=''){
+					socket.emit('send message',$msgBox.val());
+					$chat.append('<span class="You-msg">You: </span>' + $msgBox.val() + '<br/>')
+					scrollToBottom();
+				}
+				$msgBox.val('');
+			});
+			socket.on('new message', function(data){/**收到訊息*/
+				var msg = escapeHtml(data)
+				$chat.append('<span class="stranger-msg">Stranger: </span>' + msg + '<br/>');
+				scrollToBottom();
+			});
+			socket.on('guest left', function(data){
+				$chat.append('<span class="msg">陌生人已離開</span>  ');
+				$msgBox.prop('disabled', true);
+				$chat.append('<button onclick="location.reload();">回主頁</button>');
+				scrollToBottom();
+				
+			});
+			/*socket.on('whisper', function(data){
+				data = escapeHtml(data);
+				$chat.append('<span class="whisper"><b>'+data.nick + ': </b>' +data.msg + '</span><br/>');
+			});*/
+		
+			function scrollToBottom(){
+				
+				$chat.scrollTop($chat[0].scrollHeight);
+			}
+		});
+	
+		function escapeHtml(str) {
+			if (typeof(str) == "string") {
+				str = str.replace(/&/g, "&amp;"); /* must do &amp; first */
+				str = str.replace(/"/g, "&quot;");
+				str = str.replace(/'/g, "&#039;");
+				str = str.replace(/</g, "&lt;");
+				str = str.replace(/>/g, "&gt;");
+			}
+			return str;
+		}
+		
+	</script>
+
+</body>
+</html>

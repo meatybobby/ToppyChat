@@ -1,10 +1,10 @@
 // config/passport.js
 
 // load all the things we need
-var LocalStrategy   = require('passport-local').Strategy;
+var LocalStrategy = require('passport-local').Strategy;
 
 // load up the user model
-var User            = require('../app/models/user');
+var User = require('../app/models/user');
 
 // expose this function to our app using module.exports
 module.exports = function(passport) {
@@ -37,10 +37,9 @@ module.exports = function(passport) {
         // by default, local strategy uses username and password, we will override with email
         usernameField : 'userid',
         passwordField : 'password',
-		nicknameField : 'nickname',
         passReqToCallback : true // allows us to pass back the entire request to the callback
     },
-    function(req, userid, password, nickname, done) {
+    function(req, userid, password, /*nickname,*/ done) {
 
         // asynchronous
         // User.findOne wont fire unless data is sent back
@@ -65,7 +64,8 @@ module.exports = function(passport) {
                 // set the user's local credentials
                 newUser.userid    = userid;
                 newUser.password = newUser.generateHash(password);
-				newUser.nickname = nickname;
+				//newUser.nickname = nickname;
+				//newUser.friends = null;
 
                 // save the user
                 newUser.save(function(err) {
