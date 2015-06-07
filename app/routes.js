@@ -120,7 +120,8 @@ module.exports = function(app, passport) {
 				// all is well, return successful user
 				else {
 					var newUser = user;
-					newUser.password = newUser.generateHash(req.body.newpassword);
+					if(req.body.newpassword&&req.body.newpassword!="")
+						newUser.password = newUser.generateHash(req.body.newpassword);
 					newUser.nickname = req.body.nickname;
 			
 					// save the user
