@@ -27,7 +27,6 @@ exports.open = function(server,mongoStore) {
 			socket.topic = data;
 			topics[socket.id] = data;
 			updateTopics();
-			console.log(socket.id + ": " + data);
 			callback(true);
 		});
 		
