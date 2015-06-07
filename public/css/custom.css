@@ -2,6 +2,14 @@ body{
 	font-family: "微軟正黑體";
 	/*font-size: 20px;*/
 }
+#friendListArea{
+	
+}
+#chatArea {
+	height:500px;
+	/*background: yellow;*/
+}
+
 #chat{
 	height: 380px;
 	margin-bottom: 10px;
