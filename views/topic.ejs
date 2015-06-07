@@ -148,6 +148,7 @@
 				e.preventDefault();
 				if($msgBox.val()!=''){
 					socket.emit('send message',$msgBox.val());
+					console.log(socket.id);
 					$chat.append('<span class="You-msg">You: </span>' + $msgBox.val() + '<br/>')
 					scrollToBottom();
 				}

@@ -1,14 +1,12 @@
 // app/routes.js
 var User  = require('./models/user');
-var topic = require('./models/socket');
-module.exports = function(app, io, passport) {
+module.exports = function(app, passport) {
 
     // =====================================
     // HOME PAGE (with login links) ========
     // =====================================
     app.get('/', function(req, res) {
         if(req.isAuthenticated()){
-			topic.open(io);
 			res.render('topic.ejs', {
 				user : req.user // get the user out of session and pass to template
 			});
