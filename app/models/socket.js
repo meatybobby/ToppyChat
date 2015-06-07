@@ -72,7 +72,11 @@ exports.open = function(server,mongoStore) {
 					callback(false);
 					return;
 				}
-				
+				if(user.friends.indexOf(strangeUser._id)!=-1) {
+					socket.emit('already friend',null);
+					callback(false);
+					return;
+				}
 				var newUser = user;
 				newUser.friends.push(strangeUser._id);
 				newUser.save(function(err) {
@@ -87,6 +91,11 @@ exports.open = function(server,mongoStore) {
 					callback(false);
 					return;
 				}
+				if(user.friends.indexOf(strangeUser._id)!=-1) {
+					socket.emit('already friend',null);
+					callback(false);
+					return;
+				}
 				var newUser = user;
 				newUser.friends.push(socket.request.user._id);
 				newUser.save(function(err) {
@@ -94,6 +103,7 @@ exports.open = function(server,mongoStore) {
 						callback(false);
 						throw err;
 					}
+					else callback(true);
 				});
 			});
 		});
