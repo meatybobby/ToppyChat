@@ -9,7 +9,7 @@ var userSchema = mongoose.Schema({
 	userid : String,
 	password : String,
 	nickname : String,
-	friends : [userSchema],
+	friends : [String],
 
 });
 
