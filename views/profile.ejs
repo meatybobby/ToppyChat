@@ -45,7 +45,17 @@
 						
                     </p>
 					<p>
-						<%= user.friends %>
+						your id:<br>
+						<b><%= user._id  %></b>
+					</p>
+					<p>
+						your friends:
+						<ul class="friendid">
+						<% for(var i=0; i<user.friends.length; i++) { %>
+							<li><%= user.friends[i] %> <div class="delete-btn" id="<%= user.friends[i] %>">delete</div></li>
+						<% } %>
+						</ul>
+						
 					</p>
 
             </div>

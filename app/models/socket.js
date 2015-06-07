@@ -104,7 +104,10 @@ exports.open = function(server,mongoStore) {
 						callback(false);
 						throw err;
 					}
-					else callback(true);
+					else {
+						callback(true);
+						stranger[socket.id].emit('accepted', null);
+					}
 				});
 			});
 		});

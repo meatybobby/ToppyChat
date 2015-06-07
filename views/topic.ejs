@@ -106,6 +106,10 @@
 				$chat.append('<div class="leave"><p class="leave-msg">發出好友邀請...</p></div>');
 			});
 			
+			socket.on('accepted', function(data){
+				$chat.append('<div class="leave"><p class="leave-msg">已和對方成為好友！</p></div>');
+			});
+			
 			socket.on('already friend', function(data){
 				$chat.append('<div class="leave"><p class="leave-msg">你們已經是好友囉，真巧。</p></div>');
 			});
@@ -115,7 +119,7 @@
 				$chat.append('<div class="leave"><p class="leave-msg">對方發出好友邀請</p>'+
 					'<button class="btn btn-danger" id="agreeBtn">同意</button>  ' + 
 					'<button class="btn btn-danger" id="disagreeBtn">拒絕</button>' + 
-					+'</div>');
+					'</div>');
 				$('#agreeBtn').on('click', function(){
 					console.log("agree clicked");
 					socket.emit('check friend', null, function(data){
@@ -131,12 +135,14 @@
 				});
 				$('#disagreeBtn').on('click', function(){
 					socket.emit('fuck you', null);
-					$chat.append('<div class="leave"><p class="leave-msg">對方遭拒</p></div>');
+					$chat.append('<div class="leave"><p class="leave-msg">您已拒絕邀請</p></div>');
+					$('#agreeBtn').hide();
+					$('#disagreeBtn').hide();
 				});
 			});
 			
 			socket.on('fuck you', function(data){
-				$chat.append('<div class="leave"><p class="leave-msg">對方拒絕</p></div>');
+				$chat.append('<div class="leave"><p class="leave-msg">對方拒絕您的邀請</p></div>');
 			});
 			
 			socket.on('topics', function(data){

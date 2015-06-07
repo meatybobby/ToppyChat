@@ -142,3 +142,15 @@ ul#friendList li:not(:first-of-type):hover{
 .signal.online{
 	background:#AED581;
 }
+.delete-btn{
+	display: inline-block;
+	background: gray;
+	color: white;
+	padding: 3px;
+	border-radius: 3px;
+	cursor: pointer;
+}
+ul.friendid li{
+	margin-top: 10px;
+	list-style: none;
+}
