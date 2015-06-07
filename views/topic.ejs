@@ -50,8 +50,8 @@
 							<form id="send-message" class="form-inline">
 								<button  type="button" class="btn btn-default" id="quitBtn">離開</button>
 								<input size="50"  class="form-control" id="message" autocomplete="off" disabled />
-								<button type="submit"  class="btn btn-default" id="sendMsg">傳送</button>
-								<button  type="button" class="btn btn-info" id="addBtn">加好友</button>
+								<button type="submit"  class="btn btn-default" id="sendMsg" disabled>傳送</button>
+								<button  type="button" class="btn btn-info" id="addBtn" disabled>加好友</button>
 							</form>
 						</div>
 					</div>
@@ -75,6 +75,8 @@
 			var $msgBox = $('#message');
 			var $chat = $('#chat');
 			var $topics = $('#topics');
+			var $addBtn = $('#addBtn');
+			var $sendBtn = $('#sendMsg');
 			
 			$topicForm.submit(function(e){
 				e.preventDefault();
@@ -95,6 +97,38 @@
 				}
 				
 				$inputTopic.val('');
+			});
+			
+			$addBtn.click(function() {
+				socket.emit('invite friend',null);
+				$addBtn.prop('disabled', true);
+				$chat.append('<div class="leave"><p class="leave-msg">已發出好友邀請</p></div>');
+			});
+			
+			socket.on('friend request', function(data){
+				$addBtn.prop('disabled', true);
+				$chat.append('<div class="leave"><p class="leave-msg">對方發出好友邀請</p>'+
+					'<button class="btn btn-danger" id="agreeBtn">同意</button>  ' + 
+					'<button class="btn btn-danger" id="disagreeBtn">拒絕</button>' + 
+					+'</div>');
+				$('#agreeBtn').on('click', function(){
+					console.log("agree clicked");
+					socket.emit('check friend', null, function(data){
+						if(data===false){
+							$chat.append('<div class="leave"><p class="leave-msg">加入好友失敗</p></div>');
+						} else{
+							$chat.append('<div class="leave"><p class="leave-msg">已加入好友</p></div>');
+						}
+					});
+				});
+				$('#disagreeBtn').on('click', function(){
+					socket.emit('fuck you', null);
+					$chat.append('<div class="leave"><p class="leave-msg">對方遭拒</p></div>');
+				});
+			});
+			
+			socket.on('fuck you', function(data){
+				$chat.append('<div class="leave"><p class="leave-msg">對方拒絕</p></div>');
 			});
 			
 			socket.on('topics', function(data){
@@ -118,12 +152,15 @@
 					$('#chatWrap').show();
 					$chat.html('您已進入：<div class="topic">' + data + '</div><br/>');
 					$msgBox.prop('disabled', false);
+					$addBtn.prop('disabled', false);
 				});
 			});
 			
 			socket.on('guest coming', function(data){/**主題被連入*/
 				$msgBox.prop('disabled', false);
 				$chat.append('有人來囉~開始聊天吧 :D<br/>');
+				$addBtn.prop('disabled', false);
+				$sendBtn.prop('disabled', false);
 			});
 			$msgForm.submit(function(e){/**發訊息*/
 				e.preventDefault();
@@ -147,6 +184,8 @@
 				
 				$chat.append('<div class="leave"><p class="leave-msg">陌生人已經離開</p> <button class="btn btn-danger" onclick="location.reload();">回主頁</button></div>');
 				$msgBox.prop('disabled', true);
+				$sendBtn.prop('disabled', true);
+				$addBtn.prop('disabled', true);
 				//$chat.append(' ');
 				scrollToBottom();
 				// 
