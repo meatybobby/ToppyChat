@@ -2,6 +2,7 @@ var topics = {},/*id-> topic*/
 	stranger = {};/* my id-> his socket*/
 var cookieParser = require('cookie-parser'),passport = require('passport');
 var User  = require('./user');
+var onlineUser = {};
 exports.open = function(server,mongoStore) {
 	var io = require('socket.io').listen(server);
 	io.use(function(socket,next) {
@@ -12,6 +13,7 @@ exports.open = function(server,mongoStore) {
 				passport.initialize()(socket.request,null,function() {
 					passport.session()(socket.request,null,function() {
 						if(socket.request.user) {
+							onlineUser[socket.request.user._id]=socket.id;
 							next(null,true);
 						}
 						else {
@@ -24,6 +26,7 @@ exports.open = function(server,mongoStore) {
 	});
 	io.sockets.on('connection', function(socket) {
 		updateTopics();
+		io.socket.emit('online',socket.request.user._id);
 		socket.on('new topic', function(data, callback){
 			socket.topic = data;
 			topics[socket.id] = data;
@@ -60,7 +63,6 @@ exports.open = function(server,mongoStore) {
 				if(user.friends.indexOf(strangeUser._id)!=-1) socket.emit('already friend',null);
 				else stranger[socket.id].emit('friend request', null);
 			});
-			
 		});
 		
 		socket.on('check friend',function () {
@@ -87,6 +89,10 @@ exports.open = function(server,mongoStore) {
 						throw err;
 				});
 			});
+		});
+		
+		socket.on('fuck you', function() {
+			stranger[socket.id].emit('fuck you',null);
 		});
 		
 		socket.on('disconnect', function(data) {
