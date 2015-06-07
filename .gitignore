@@ -1,6 +1,4 @@
 node_modules/*
 data/*
 start_server.bat 
-startmongo.bat 
-start_server_douglas.bat
-startmongo_douglas.bat
+startmongo.bat
