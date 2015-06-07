@@ -50,7 +50,7 @@ exports.open = function(server,mongoStore) {
 			//socket.broadcast.emit('new message', data); /*sent to everyone except the sender*/
 		});
 		
-		socket.on('invite friend',function() {
+		socket.on('invite friend',function(data) {
 			var strangeUser = stranger[socket.id].request.user;
 			User.findOne({ 'userid' :  socket.request.user.userid }, function(err, user) {
 				if(err) return;
@@ -63,28 +63,35 @@ exports.open = function(server,mongoStore) {
 			
 		});
 		
-		socket.on('check friend',function () {
+		socket.on('check friend',function (data, callback) {
 			var strangeUser = stranger[socket.id].request.user;
 			User.findOne({ 'userid' :  socket.request.user.userid }, function(err, user) {
-				if(err) return;
-				if(!user) return;
-				if(!stranger[socket.id]) return;
+				if(err || !user || !stranger[socket.id]) {
+					callback(false);
+					return;
+				}
+				
 				var newUser = user;
 				newUser.friends.push(strangeUser._id);
 				newUser.save(function(err) {
-					if (err)
+					if (err){
+						callback(false);
 						throw err;
+					}
 				});
 			});
 			User.findOne({ 'userid' :  strangeUser.userid }, function(err, user) {
-				if(err) return;
-				if(!user) return;
-				if(!stranger[socket.id]) return;
+				if(err || !user || !stranger[socket.id]) {
+					callback(false);
+					return;
+				}
 				var newUser = user;
 				newUser.friends.push(socket.request.user._id);
 				newUser.save(function(err) {
-					if (err)
+					if (err){
+						callback(false);
 						throw err;
+					}
 				});
 			});
 		});
