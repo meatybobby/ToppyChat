@@ -1,2 +1,2 @@
 # ToppyChat
-Being developed.
+Developing.
