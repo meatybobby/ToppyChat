@@ -8,7 +8,8 @@ module.exports = function(app, passport) {
     app.get('/', function(req, res) {
         if(req.isAuthenticated()){
 			res.render('topic.ejs', {
-				user : req.user // get the user out of session and pass to template
+				user : req.user, // get the user out of session and pass to template
+				page_name: 'topic'
 			});
 		}
 		else
@@ -72,6 +73,17 @@ module.exports = function(app, passport) {
 		  if (err) return console.error(err);
 		  res.json(users);
 		})
+	});
+	
+	app.get('/profile', function(req, res){
+		if(req.isAuthenticated()){
+			res.render('profile.ejs', {
+				user : req.user, // get the user out of session and pass to template
+				page_name: 'profile'
+			});
+		}
+		else
+			res.redirect('/'); // load the index.ejs file
 	});
 	
 	

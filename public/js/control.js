@@ -6,5 +6,10 @@ $(function () {
 		}
 		return false;
 	});
+	
+	$('ul.nav.navbar-nav li').click(function(){
+		
+		$(this).addClass('active');
+	});
 });
  
