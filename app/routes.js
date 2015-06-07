@@ -79,13 +79,19 @@ module.exports = function(app, passport) {
 		if(req.isAuthenticated()){
 			res.render('profile.ejs', {
 				user : req.user, // get the user out of session and pass to template
-				page_name: 'profile'
+				page_name: 'profile',
+				message: req.flash('updateMessage')
 			});
 		}
 		else
 			res.redirect('/'); // load the index.ejs file
 	});
 	
+	app.post('/profile', passport.authenticate('local-update', {
+        successRedirect : '/', // redirect to the secure profile section
+        failureRedirect : '/profile', // redirect back to the signup page if there is an error
+        failureFlash : true // allow flash messages
+    }));
 	
 	app.use("*",function(req,res){
 		res.status(404).send('404 Page not found!');

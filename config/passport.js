@@ -129,25 +129,23 @@ module.exports = function(passport) {
                 return done(err);
 
             // check to see if theres already a user with that email
-            if (!user) {
-                return done(null, false, req.flash('loginMessage', 'No user found.'));
-            } else {
+            if (!user) 
+                return done(null, false, req.flash('updateMessage', 'No user found.'));
+            if (!user.validPassword(password))
+                return done(null, false, req.flash('updateMessage', 'Oops! Wrong password.'));
+				
+             var newUser = user;
+			
+             // set the user's local credentials
+            newUser.password = newUser.generateHash(req.body.newpassword);
+			newUser.nickname = req.body.nickname;
 
-                // if there is no user with that email
-                // create the user
-                var newUser            = user;
-
-                // set the user's local credentials
-                newUser.password = newUser.generateHash(password);
-				newUser.nickname = req.body.nickname;
-
-                // save the user
-                newUser.save(function(err) {
-                    if (err)
-                        throw err;
-                    return done(null, newUser);
-                });
-            }
+             // save the user
+             newUser.save(function(err) {
+                 if (err)
+                     throw err;
+                 return done(null, newUser);
+             });
 
         });    
 
