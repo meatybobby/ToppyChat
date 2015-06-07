@@ -26,7 +26,7 @@ exports.open = function(server,mongoStore) {
 	});
 	io.sockets.on('connection', function(socket) {
 		updateTopics();
-		io.socket.emit('online',socket.request.user._id);
+		io.sockets.emit('online',socket.request.user._id);
 		socket.on('new topic', function(data, callback){
 			socket.topic = data;
 			topics[socket.id] = data;
