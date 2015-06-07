@@ -4,87 +4,119 @@
 	<meta charset="utf-8" />
 	<title>chat</title>
 	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<style>
-		body{
-			font-family: "微軟正黑體";
-			font-size: 20px;
-		}
-		#chat{
-			height: 300px;
-			
-			overflow: auto;
-		}
-		#chatWrap{
-			display: none;
-			width: 500px;
-			border: 1px solid black;
-			padding: 10px;
-		}
-		#topicWrap{
-			background: #009688;
-			margin-top: 30px;
-			height: 300px;
-			
-		}
-		.error{
-			color: red;
-		}
-		.whisper{
-			color: gray;
-			font-style: italic;
-		}
-		.topic{
-			margin: 10px;
-			padding: 5px;
-			background: #B2DFDB;
-			display: inline-block;
-			font-size: 20px;
-			border-radius: 5px;
-		}
-		.topic:hover, #back-btn:hover{
-			cursor: pointer;
-		}
-		#back-btn{
-			background: #80DEEA;
-			padding: 10px;
-			border-radius: 5px;
-			display: inline-block;
-		}
-		.You-msg{
-			font-weight: bold;
-			color: blue;
-		}
-		.stranger-msg{
-			font-weight: bold;
-			color:red;
-		}
-	</style>
-
-	
-</head>
-<body>
-
-	
-	<div id="createWrap">
-		<form id="createTopic">
-			<input size="35" id="inputTopic"  autocomplete="off"/>
-			<input type="submit" value="新增主題"/>
-		</form>
-	</div>
-	
-	<div id="topicWrap">
-		<div id="topics"></div>
-	</div>
-	
-	<div id="chatWrap">
-		<div id="chat"></div>
-		<form id="send-message">
-			<input size="35" id="message" autocomplete="off" disabled />
-			<input type="submit" value="傳送"/>
-		</form>
-	</div>
 	
 	<script src="http://code.jquery.com/jquery-latest.min.js"></script>
+	
+	<link href="css/bootstrap.min.css" rel="stylesheet">
+	<link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css">
+
+	<link href="css/speech-bubbles.css" rel="stylesheet">
+	<link href="css/custom.css" rel="stylesheet">
+	
+	<script src="js/bootstrap.min.js"></script>
+	
+	<script src="js/control.js"></script>
+	<script src="js/getFriendList.js"></script>
+	<script src="js/dynamic-tab.js"></script>
+	<style>
+		#friendListArea{
+			height: 500px;
+			/*background: green;*/
+		}
+		#chatArea {
+			height:500px;
+			/*background: yellow;*/
+		}
+		#testblock{
+			background:red;
+			width: 50px;
+			height: 100px;
+		}
+	</style>
+</head>
+<body>
+	<header>
+		<nav class="navbar navbar-default" role="navigation">
+		  <div class="container">
+			<!-- Brand and toggle get grouped for better mobile display -->
+			<div class="navbar-header">
+			  <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+				<span class="sr-only">Toggle navigation</span>
+				<span class="icon-bar"></span>
+				<span class="icon-bar"></span>
+				<span class="icon-bar"></span>
+			  </button>
+			  <a class="navbar-brand" href="/">ToppyChat
+			 </a>
+			</div>
+
+			<!-- Collect the nav links, forms, and other content for toggling -->
+			<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+			  <ul class="nav navbar-nav">
+				<li class="active"><a href="/">Chat!</a></li>
+				<li><a href="#">Account</a></li>
+				<li><a href="#">About</a></li>
+				<li><a href="/logout">Logout</a></li>
+			  </ul>
+			</div><!-- /.navbar-collapse -->
+		  </div><!-- /.container-fluid -->
+		</nav>
+	</header>
+	<div class="container">
+		<div class="row">
+			<div class="col-md-3" id="friendListArea">
+				<ul class="list-group" id="friendList">
+				  <li class="list-group-item list-group-item-info">Friends</li>
+				 
+				</ul>
+			</div>
+			<div class="col-md-9" id="chatArea">
+			
+				
+				<!-- Nav tabs from Bootstrap 3 -->
+				<ul id="myTab" class="nav nav-tabs" role="tablist">
+					<li role="presentation" id="li1" class="active">
+						<a href="#tab1" aria-controls="tab1" role="tab" data-toggle="tab">Topics</a>
+					</li>
+					<!--li id="last"><a href="#addTab"><span class="glyphicon glyphicon-plus"></span> Add Tab</a></li-->
+				</ul>
+			
+				<!-- Tab panes from Bootstrap 3 -->
+				<div class="tab-content">
+					<div role="tabpanel" class="tab-pane fade in active" id="tab1">
+						
+						<div id="createWrap">
+							<form id="createTopic" class="form-inline" role="form">
+								<input  id="inputTopic"  class="form-control" size="60" autocomplete="off"/>
+								<button type="submit" class="btn btn-warning">新增主題</button>
+							</form>
+						</div>
+						
+						<div id="topicWrap" class="panel panel-default">
+							 
+							<div id="topics"></div>
+						</div>
+						
+						<div id="chatWrap" class="panel panel-default">
+							<div id="chat"></div>
+							<form id="send-message" class="form-inline">
+								<button  type="button" class="btn btn-default" id="quitBtn">離開</button>
+								<input size="50"  class="form-control" id="message" autocomplete="off" disabled />
+								<button type="submit"  class="btn btn-default" id="sendMsg">傳送</button>
+								<button  type="button" class="btn btn-info" id="addBtn">加好友</button>
+							</form>
+						</div>
+					</div>
+				</div>
+				
+				
+			</div>
+		</div>
+	</div>
+	
+	
+	
+	
 	<script src="/socket.io/socket.io.js"></script>
 	<script>
 		jQuery(function($){
@@ -108,8 +140,9 @@
 						$('#createWrap').hide();
 						$('#topicWrap').hide();
 						$('#chatWrap').show();
+						var str = '已建立主題：<div class="topic">'+topicStr+'</div><p>等待陌生人...</p>'
 						
-						$chat.html('<b>'+topicStr+'</b><br/>等待陌生人...<br/>');
+						$chat.html(str);
 					});
 				}
 				
@@ -135,7 +168,7 @@
 					$('#createWrap').hide();
 					$('#topicWrap').hide();
 					$('#chatWrap').show();
-					$chat.html('您已進入：' + data + '<br/>');
+					$chat.html('您已進入：<div class="topic">' + data + '</div><br/>');
 					$msgBox.prop('disabled', false);
 				});
 			});
@@ -148,22 +181,27 @@
 				e.preventDefault();
 				if($msgBox.val()!=''){
 					socket.emit('send message',$msgBox.val());
-					console.log(socket.id);
-					$chat.append('<span class="You-msg">You: </span>' + $msgBox.val() + '<br/>')
+					//$chat.append('<span class="You-msg">You: </span>' + $msgBox.val() + '<br/>')
+					var item = $('<p class="triangle-isosceles right msg you-msg">' + $msgBox.val() + '</p>').hide().fadeIn(200);
+					$chat.append(item);
 					scrollToBottom();
 				}
 				$msgBox.val('');
 			});
 			socket.on('new message', function(data){/**收到訊息*/
 				var msg = escapeHtml(data)
-				$chat.append('<span class="stranger-msg">Stranger: </span>' + msg + '<br/>');
+				//$chat.append('<span class="stranger-msg">Stranger: </span>' + msg + '<br/>');
+				var item = $('<p class="triangle-isosceles left msg stranger-msg">' + msg + '</p>').hide().fadeIn(200);
+				$chat.append(item);
 				scrollToBottom();
 			});
 			socket.on('guest left', function(data){
-				$chat.append('<span class="msg">陌生人已離開</span>  ');
+				
+				$chat.append('<div class="leave"><p class="leave-msg">陌生人已經離開</p> <button class="btn btn-danger" onclick="location.reload();">回主頁</button></div>');
 				$msgBox.prop('disabled', true);
-				$chat.append('<button onclick="location.reload();">回主頁</button>');
+				//$chat.append(' ');
 				scrollToBottom();
+				// 
 				
 			});
 			/*socket.on('whisper', function(data){
