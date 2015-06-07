@@ -100,9 +100,14 @@
 			});
 			
 			$addBtn.click(function() {
+				console.log("按下加入好友按鈕");
 				socket.emit('invite friend',null);
 				$addBtn.prop('disabled', true);
-				$chat.append('<div class="leave"><p class="leave-msg">已發出好友邀請</p></div>');
+				$chat.append('<div class="leave"><p class="leave-msg">發出好友邀請...</p></div>');
+			});
+			
+			socket.on('already friend', function(data){
+				$chat.append('<div class="leave"><p class="leave-msg">你們已經是好友囉，真巧。</p></div>');
 			});
 			
 			socket.on('friend request', function(data){
@@ -114,11 +119,14 @@
 				$('#agreeBtn').on('click', function(){
 					console.log("agree clicked");
 					socket.emit('check friend', null, function(data){
+						console.log("check friend callback");
 						if(data===false){
 							$chat.append('<div class="leave"><p class="leave-msg">加入好友失敗</p></div>');
 						} else{
 							$chat.append('<div class="leave"><p class="leave-msg">已加入好友</p></div>');
 						}
+						$('#agreeBtn').hide();
+						$('#disagreeBtn').hide();
 					});
 				});
 				$('#disagreeBtn').on('click', function(){
@@ -153,6 +161,7 @@
 					$chat.html('您已進入：<div class="topic">' + data + '</div><br/>');
 					$msgBox.prop('disabled', false);
 					$addBtn.prop('disabled', false);
+					$sendBtn.prop('disabled', false);
 				});
 			});
 			
