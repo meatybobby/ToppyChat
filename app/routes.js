@@ -87,11 +87,54 @@ module.exports = function(app, passport) {
 			res.redirect('/'); // load the index.ejs file
 	});
 	
-	app.post('/profile', passport.authenticate('local-update', {
-        successRedirect : '/', // redirect to the secure profile section
-        failureRedirect : '/profile', // redirect back to the signup page if there is an error
-        failureFlash : true // allow flash messages
-    }));
+	app.post('/profile', function(req,res) {
+		if(req.isAuthenticated()) {
+			User.findOne({ 'userid' :  req.user.userid }, function(err, user) {
+				// if there are any errors, return the error before anything else
+				if (err) {
+					res.render('profile.ejs', {
+						user : req.user, // get the user out of session and pass to template
+						page_name: 'profile',
+						message: 'Database Error'
+					});
+				}
+			
+				// if no user is found, return the message
+				else if (!user) {
+					res.render('profile.ejs', {
+						user : req.user, // get the user out of session and pass to template
+						page_name: 'profile',
+						message: 'No user'
+					});
+				}
+			
+				// if the user is found but the password is wrong
+				else if (!user.validPassword(req.body.password)) {
+					res.render('profile.ejs', {
+						user : req.user, // get the user out of session and pass to template
+						page_name: 'profile',
+						message: 'Password fault'
+					});
+				}
+			
+				// all is well, return successful user
+				else {
+					var newUser = user;
+					newUser.password = newUser.generateHash(req.body.newpassword);
+					newUser.nickname = req.body.nickname;
+			
+					// save the user
+					newUser.save(function(err) {
+						if (err)
+							throw err;
+						return res.redirect('/');
+					});
+				}
+			});
+		}
+		else
+			res.redirect('/'); // load the index.ejs file
+    });
 	
 	app.use("*",function(req,res){
 		res.status(404).send('404 Page not found!');

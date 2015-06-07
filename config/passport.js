@@ -109,48 +109,5 @@ module.exports = function(passport) {
 
     }));
 
-	passport.use('local-update', new LocalStrategy({
-        // by default, local strategy uses username and password, we will override with email
-        usernameField : 'userid',
-        passwordField : 'password',
-        passReqToCallback : true // allows us to pass back the entire request to the callback
-    },
-    function(req, userid, password, done) {
-
-        // asynchronous
-        // User.findOne wont fire unless data is sent back
-        process.nextTick(function() {
-
-        // find a user whose email is the same as the forms email
-        // we are checking to see if the user trying to login already exists
-        User.findOne({ 'userid' :  userid }, function(err, user) {
-            // if there are any errors, return the error
-            if (err)
-                return done(err);
-
-            // check to see if theres already a user with that email
-            if (!user) 
-                return done(null, false, req.flash('updateMessage', 'No user found.'));
-            if (!user.validPassword(password))
-                return done(null, false, req.flash('updateMessage', 'Oops! Wrong password.'));
-				
-             var newUser = user;
-			
-             // set the user's local credentials
-            newUser.password = newUser.generateHash(req.body.newpassword);
-			newUser.nickname = req.body.nickname;
-
-             // save the user
-             newUser.save(function(err) {
-                 if (err)
-                     throw err;
-                 return done(null, newUser);
-             });
-
-        });    
-
-        });
-
-    }));
 
 };
