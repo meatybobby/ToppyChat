@@ -128,7 +128,7 @@ module.exports = function(app, passport) {
 					newUser.save(function(err) {
 						if (err)
 							throw err;
-						return res.redirect('/');
+						return res.redirect('/profile');
 					});
 				}
 			});
@@ -143,12 +143,12 @@ module.exports = function(app, passport) {
 			User.findOne({ 'userid' :  req.user.userid }, function(err, user) {
 				// if there are any errors, return the error before anything else
 				if (err) {
-					return res.redirect('/');
+					return res.redirect('/profile');
 				}
 			
 				// if no user is found, return the message
 				else if (!user) {
-					return res.redirect('/');
+					return res.redirect('/profile');
 				}
 			
 				// all is well, return successful user
@@ -161,7 +161,7 @@ module.exports = function(app, passport) {
 						newUser.save(function(err) {
 							if (err)
 								throw err;
-							return res.redirect('/');
+							return res.redirect('/profile');
 						});
 					}
 				}
@@ -169,31 +169,31 @@ module.exports = function(app, passport) {
 			User.findOne({ 'userid' :  req.params.friend_id }, function(err, user) {
 				// if there are any errors, return the error before anything else
 				if (err) {
-					return res.redirect('/');
+					return res.redirect('/profile');
 				}
 			
 				// if no user is found, return the message
 				else if (!user) {
-					return res.redirect('/');
+					return res.redirect('/profile');
 				}
 			
 				// all is well, return successful user
 				else {
 					var newUser = user;
-					find=newUser.friends.indexOf(req.params.deleteUser);
+					find=newUser.friends.indexOf(deleteUser);
 					if(find!=-1) {
 						newUser.friends.splice(find,1);
 						// save the user
 						newUser.save(function(err) {
 							if (err)
 								throw err;
-							return res.redirect('/');
+							return res.redirect('/profile');
 						});
 					}
 				}
 			});
 		}
-		else res.redirect('/');
+		else res.redirect('/profile');
 	});
 	
 	app.use("*",function(req,res){

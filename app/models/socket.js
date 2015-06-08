@@ -4,6 +4,7 @@ var cookieParser = require('cookie-parser'),passport = require('passport');
 var User  = require('./user');
 var Message = require('./message');
 var onlineUser = {};
+var online = [];
 exports.open = function(server,mongoStore) {
 	var io = require('socket.io').listen(server);
 	io.use(function(socket,next) {
@@ -15,6 +16,7 @@ exports.open = function(server,mongoStore) {
 					passport.session()(socket.request,null,function() {
 						if(socket.request.user) {
 							onlineUser[socket.request.user.userid]=socket;
+							online.push(socket.request.user.userid);
 							next(null,true);
 						}
 						else {
@@ -26,7 +28,8 @@ exports.open = function(server,mongoStore) {
 		});
 	});
 	io.sockets.on('connection', function(socket) {
-		var tempMessage = {};
+		var tempMessage = [];
+		socket.emit('online user',online);
 		updateTopics();
 		io.sockets.emit('online',socket.request.user.userid);
 		socket.on('new topic', function(data, callback){
@@ -126,6 +129,9 @@ exports.open = function(server,mongoStore) {
 		
 		socket.on('disconnect', function(data) {
 			delete onlineUser[socket.request.user.userid];
+			var find = online.indexOf(socket.request.user.userid);
+			online.splice(find,1);
+			io.sockets.emit('offline',socket.request.user.userid);
 			if(!socket.topic && !stranger[socket.id]) return;
 			if(socket.topic) {
 				delete topics[socket.id];
