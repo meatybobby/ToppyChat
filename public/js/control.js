@@ -13,19 +13,25 @@ $(function () {
 	});
 	
 	
-	$('.delete-btn').on('click', function(){
-		console.log("delete click!");
+	$('.delete-btn').on('click', function(e){
+		e.stopPropagation();
 		var id = $(this).prop('id');
-		$.ajax({
-		url: '/friends/'+id,
-		type: 'DELETE',
-		success: function(result) {
-			// Do something with the result
-			alert('成功刪除!');
+		console.log("delete click!");
+		if(confirm('確定刪除 '+id+' ?')) {
+			
+			$.ajax({
+				url: '/friends/'+id,
+				type: 'DELETE',
+				success: function(result) {
+					// Do something with the result
+					//alert('成功刪除!');
+					$('li#li-'+id).hide(100, function(){
+						$(this).remove();
+					});
+				}			
+			});
 		}
+	
 	});
-	
-	
-});
 });
  
