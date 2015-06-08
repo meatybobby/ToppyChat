@@ -10,13 +10,19 @@ body{
 	/*background: yellow;*/
 }
 
-#chat{
+#chat, .chat-friend{
 	height: 380px;
 	margin-bottom: 10px;
 	overflow: auto;
 }
 #chatWrap{
 	display: none;
+	/*width: 500px;*/
+	/*border: 1px solid black;*/
+	padding: 10px;
+}
+.chatWrap-friend{
+	/*display: none;*/
 	/*width: 500px;*/
 	/*border: 1px solid black;*/
 	padding: 10px;
@@ -107,12 +113,14 @@ body{
 	display:inline-block;
 	width:0;
 }
-#message{
-	width: 70%;
-	
+#message-friend{
+	width: 80%;
 	display: inline-block;
 }
-#sendMsg{
+#message{
+	width: 70%;
+}
+#sendMsg, .sendMsg-friend{
 	display: inline-block;
 	width: 55px;
 }

@@ -16,7 +16,7 @@
 				<ul class="list-group" id="friendList">
 				  <li class="list-group-item list-group-item-info">Friends</li>
 					<% for(var i=0; i<user.friends.length; i++) { %>
-						<li class="list-group-item">
+						<li class="list-group-item" id="li-<%= user.friends[i] %>">
 							<span class="friend"><%= user.friends[i] %></span>
 							<div class="signal online"></div>
 						</li>
@@ -59,6 +59,8 @@
 								<button  type="button" class="btn btn-info" id="addBtn" disabled>加好友</button>
 							</form>
 						</div>
+						
+						
 					</div>
 				</div>
 				
@@ -83,6 +85,42 @@
 			var $addBtn = $('#addBtn');
 			var $sendBtn = $('#sendMsg');
 			
+			/**跟朋友聊天*/
+			$('.tab-content').on('keypress', '.chatWrap-friend #message-friend', function(e){
+				if(e.which==13){
+					$(this).parent().find('.sendMsg-friend').trigger('click');
+				}
+			});
+			$('.tab-content').on('click', '.chatWrap-friend .sendMsg-friend', function(e){
+				//console.log($(this).prop('id'));
+				var id = $(this).prop('id');
+				var $chatFriendBox = $(this).parent().parent().find('.chat-friend');
+				var $msgFriend = $(this).parent().find('#message-friend');
+				if($msgFriend.val()!=''){
+					var msgTxt = $msgFriend.val();
+					var item=$('<p class="triangle-isosceles right msg you-msg">' + msgTxt + '</p>').hide().fadeIn(200);
+					$chatFriendBox.append(item);
+					scrollToBottom($chatFriendBox);
+					socket.emit('talk to friend', {msg: msgTxt, id: id}  );
+					$msgFriend.val('');
+				}
+				//$('.chat-friend '+id).append(id);
+				
+			});
+			socket.on('receive from friend', function(data){
+				$('ul#friendList li#li-' + data.id).trigger('click', function(){
+					$('ul#myTab li#li'+data.id).trigger('click');
+				});
+				
+				
+				//$('ul#friendList li#' + data.id)
+				var $chatFriendBox = $('.chat-friend#' + data.id);
+				console.log($chatFriendBox);
+				var item=$('<p class="triangle-isosceles left msg stranger-msg">' + data.msg + '</p>').hide().fadeIn(200);
+				$chatFriendBox.append(item);
+				scrollToBottom($chatFriendBox);
+				console.log('receive from friend id:' + data.id+'   msg: '+data.msg);
+			});
 			$topicForm.submit(function(e){
 				e.preventDefault();
 				if( $inputTopic.val().length > 30){
@@ -109,17 +147,19 @@
 				socket.emit('invite friend',null);
 				$addBtn.prop('disabled', true);
 				$chat.append('<div class="leave"><p class="leave-msg">發出好友邀請...</p></div>');
-				scrollToBottom();
+				scrollToBottom($chat);
 			});
 			
 			socket.on('accepted', function(data){
 				$chat.append('<div class="leave"><p class="leave-msg">已和對方成為好友！</p></div>');
-				scrollToBottom();
+				/*var newFriendStr = '';
+				$('#friendList li:last-child').after(newFriendStr);*/
+				scrollToBottom($chat);
 			});
 			
 			socket.on('already friend', function(data){
 				$chat.append('<div class="leave"><p class="leave-msg">你們已經是好友囉，真巧。</p></div>');
-				scrollToBottom();
+				scrollToBottom($chat);
 			});
 			
 			socket.on('friend request', function(data){
@@ -128,17 +168,17 @@
 					'<button class="btn btn-danger" id="agreeBtn">同意</button>  ' + 
 					'<button class="btn btn-danger" id="disagreeBtn">拒絕</button>' + 
 					'</div>');
-				scrollToBottom();
+				scrollToBottom($chat);
 				$('#agreeBtn').on('click', function(){
 					console.log("agree clicked");
 					socket.emit('check friend', null, function(data){
 						console.log("check friend callback");
 						if(data===false){
 							$chat.append('<div class="leave"><p class="leave-msg">加入好友失敗</p></div>');
-							scrollToBottom();
+							scrollToBottom($chat);
 						} else{
 							$chat.append('<div class="leave"><p class="leave-msg">已加入好友</p></div>');
-							scrollToBottom();
+							scrollToBottom($chat);
 						}
 						$('#agreeBtn').hide();
 						$('#disagreeBtn').hide();
@@ -149,13 +189,13 @@
 					$chat.append('<div class="leave"><p class="leave-msg">您已拒絕邀請</p></div>');
 					$('#agreeBtn').hide();
 					$('#disagreeBtn').hide();
-					scrollToBottom();
+					scrollToBottom($chat);
 				});
 			});
 			
 			socket.on('fuck you', function(data){
 				$chat.append('<div class="leave"><p class="leave-msg">對方拒絕您的邀請</p></div>');
-				scrollToBottom();
+				scrollToBottom($chat);
 			});
 			
 			socket.on('topics', function(data){
@@ -197,7 +237,7 @@
 					//$chat.append('<span class="You-msg">You: </span>' + $msgBox.val() + '<br/>')
 					var item = $('<p class="triangle-isosceles right msg you-msg">' + $msgBox.val() + '</p>').hide().fadeIn(200);
 					$chat.append(item);
-					scrollToBottom();
+					scrollToBottom($chat);
 				}
 				$msgBox.val('');
 			});
@@ -206,7 +246,7 @@
 				//$chat.append('<span class="stranger-msg">Stranger: </span>' + msg + '<br/>');
 				var item = $('<p class="triangle-isosceles left msg stranger-msg">' + msg + '</p>').hide().fadeIn(200);
 				$chat.append(item);
-				scrollToBottom();
+				scrollToBottom($chat);
 			});
 			socket.on('guest left', function(data){
 				
@@ -215,7 +255,7 @@
 				$sendBtn.prop('disabled', true);
 				$addBtn.prop('disabled', true);
 				//$chat.append(' ');
-				scrollToBottom();
+				scrollToBottom($chat);
 				// 
 				
 			});
@@ -224,7 +264,7 @@
 				$chat.append('<span class="whisper"><b>'+data.nick + ': </b>' +data.msg + '</span><br/>');
 			});*/
 		
-			function scrollToBottom(){
+			function scrollToBottom($chat){
 				
 				$chat.scrollTop($chat[0].scrollHeight);
 			}

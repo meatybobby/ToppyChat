@@ -4,12 +4,12 @@ function deleteFriend(deleteid,friendid,res,st) {
 	User.findOne({ 'userid' :  deleteid }, function(err, user) {
 		// if there are any errors, return the error before anything else
 		if (err) {
-			return res.write('Faild');
+			return res.write('Failed');
 		}
 	
 		// if no user is found, return the message
 		else if (!user) {
-			return res.write('Faild');
+			return res.write('Failed');
 		}
 	
 		// all is well, return successful user

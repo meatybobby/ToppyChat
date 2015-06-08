@@ -1,5 +1,6 @@
+var inTabs = [];
 $(function () {
-	var inTabs = [];
+	
 	
 	$('ul#friendList li:not(:first-of-type)').on('click', function () { // Click event on the "Add Tab" button
 		var nbrLiElem = ($('ul#myTab li').length) - 1; // Count how many <li> there are (minus 1 because one <li> is the "Add Tab" button)
@@ -22,17 +23,29 @@ $(function () {
 				inTabs.splice(idx, 1);
 				if(inTabs.length==0) {
 					console.log('all empty!');
+					//if(!$('li#li1').hasClass('active')){
+						//console.log("topic");
+						$('div#tab1').addClass('active');
+						$('div#tab1').addClass('in');
+						$('li#li1').addClass('active');
+					//}
 					
-					$('div#tab1').addClass('active');
-					$('div#tab1').addClass('in');
-					$('li#li1').addClass('active');
 					//$('div#tab1').show();
 				}
 				
 			});
 		
 			/**the content (對話紀錄)*/
-			$('div.tab-content div[role="tabpanel"]:last-child').after('<div role="tabpanel" class="tab-pane fade in" id="' + friendName + '"><p> '+ friendName +' </p></div>');
+			
+			var chatWindow = '<div class="panel panel-default chatWrap-friend">'+
+								'<div class="chat-friend" id="'+friendName+'"></div>'+
+									'<div id="send-message-friend" class="form-inline">'+
+										'<input class="form-control" id="message-friend" autocomplete="off" />'+
+										'<button type="button" class="btn btn-default sendMsg-friend" id="'+friendName+'">傳送</button>'+
+									'</div>'+
+							 '</div>';
+			
+			$('div.tab-content div[role="tabpanel"]:last-child').after('<div role="tabpanel" class="tab-pane fade in" id="' + friendName + '">'+ chatWindow +'</div>');
 			
 		}
 			
@@ -41,6 +54,7 @@ $(function () {
  
 function removeTab(liElem) { // Function remove tab with the <li> number
 		$('ul#myTab > li#li' + liElem).fadeOut(100, function () { 
+			$(this).removeClass('active');
 			$(this).remove(); // Remove the <li></li> with a fadeout effect
 			//$('#messagesAlert').text(''); // Empty the <div id="messagesAlert"></div>
 		});

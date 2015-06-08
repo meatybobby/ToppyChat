@@ -128,10 +128,11 @@ exports.open = function(server,mongoStore) {
 			stranger[socket.id].emit('fuck you',null);
 		});
 		
-		socket.on('talk',function(data,id) {
+		socket.on('talk to friend',function(data) {
+			console.log('talk to friend: ' + data.id+'   msg:' + data.msg);
 			tempMessage.push(data);
-			if(onlineUser[id])
-				onlineUser[id].emit('receive',data);
+			if(onlineUser[data.id])
+				onlineUser[data.id].emit('receive from friend',{msg: data.msg, id: socket.request.user.userid});
 		});
 		
 		socket.on('disconnect', function(data) {
