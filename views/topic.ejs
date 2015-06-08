@@ -100,9 +100,18 @@
 			});
 			
 			$addBtn.click(function() {
+				console.log("按下加入好友按鈕");
 				socket.emit('invite friend',null);
 				$addBtn.prop('disabled', true);
-				$chat.append('<div class="leave"><p class="leave-msg">已發出好友邀請</p></div>');
+				$chat.append('<div class="leave"><p class="leave-msg">發出好友邀請...</p></div>');
+			});
+			
+			socket.on('accepted', function(data){
+				$chat.append('<div class="leave"><p class="leave-msg">已和對方成為好友！</p></div>');
+			});
+			
+			socket.on('already friend', function(data){
+				$chat.append('<div class="leave"><p class="leave-msg">你們已經是好友囉，真巧。</p></div>');
 			});
 			
 			socket.on('friend request', function(data){
@@ -110,25 +119,30 @@
 				$chat.append('<div class="leave"><p class="leave-msg">對方發出好友邀請</p>'+
 					'<button class="btn btn-danger" id="agreeBtn">同意</button>  ' + 
 					'<button class="btn btn-danger" id="disagreeBtn">拒絕</button>' + 
-					+'</div>');
+					'</div>');
 				$('#agreeBtn').on('click', function(){
 					console.log("agree clicked");
 					socket.emit('check friend', null, function(data){
+						console.log("check friend callback");
 						if(data===false){
 							$chat.append('<div class="leave"><p class="leave-msg">加入好友失敗</p></div>');
 						} else{
 							$chat.append('<div class="leave"><p class="leave-msg">已加入好友</p></div>');
 						}
+						$('#agreeBtn').hide();
+						$('#disagreeBtn').hide();
 					});
 				});
 				$('#disagreeBtn').on('click', function(){
 					socket.emit('fuck you', null);
-					$chat.append('<div class="leave"><p class="leave-msg">對方遭拒</p></div>');
+					$chat.append('<div class="leave"><p class="leave-msg">您已拒絕邀請</p></div>');
+					$('#agreeBtn').hide();
+					$('#disagreeBtn').hide();
 				});
 			});
 			
 			socket.on('fuck you', function(data){
-				$chat.append('<div class="leave"><p class="leave-msg">對方拒絕</p></div>');
+				$chat.append('<div class="leave"><p class="leave-msg">對方拒絕您的邀請</p></div>');
 			});
 			
 			socket.on('topics', function(data){
@@ -153,6 +167,7 @@
 					$chat.html('您已進入：<div class="topic">' + data + '</div><br/>');
 					$msgBox.prop('disabled', false);
 					$addBtn.prop('disabled', false);
+					$sendBtn.prop('disabled', false);
 				});
 			});
 			

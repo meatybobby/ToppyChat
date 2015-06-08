@@ -54,6 +54,7 @@ exports.open = function(server,mongoStore) {
 		});
 		
 		socket.on('invite friend',function(data) {
+			console.log('invite sent to server');
 			var strangeUser = stranger[socket.id].request.user;
 			User.findOne({ 'userid' :  socket.request.user.userid }, function(err, user) {
 				if(err) return;
@@ -103,7 +104,10 @@ exports.open = function(server,mongoStore) {
 						callback(false);
 						throw err;
 					}
-					else callback(true);
+					else {
+						callback(true);
+						stranger[socket.id].emit('accepted', null);
+					}
 				});
 			});
 		});
