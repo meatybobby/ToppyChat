@@ -14,6 +14,7 @@ $(function () {
 	
 	
 	$('.delete-btn').on('click', function(){
+		console.log("delete click!");
 		var id = $(this).prop('id');
 		$.ajax({
 		url: '/friends/'+id,

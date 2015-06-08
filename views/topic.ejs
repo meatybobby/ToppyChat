@@ -15,7 +15,12 @@
 			<div class="col-md-3" id="friendListArea">
 				<ul class="list-group" id="friendList">
 				  <li class="list-group-item list-group-item-info">Friends</li>
-				 
+					<% for(var i=0; i<user.friends.length; i++) { %>
+						<li class="list-group-item">
+							<span class="friend"><%= user.friends[i] %></span>
+							<div class="signal online"></div>
+						</li>
+					<% } %>
 				</ul>
 			</div>
 			<div class="col-md-9" id="chatArea">
@@ -104,14 +109,17 @@
 				socket.emit('invite friend',null);
 				$addBtn.prop('disabled', true);
 				$chat.append('<div class="leave"><p class="leave-msg">發出好友邀請...</p></div>');
+				scrollToBottom();
 			});
 			
 			socket.on('accepted', function(data){
 				$chat.append('<div class="leave"><p class="leave-msg">已和對方成為好友！</p></div>');
+				scrollToBottom();
 			});
 			
 			socket.on('already friend', function(data){
 				$chat.append('<div class="leave"><p class="leave-msg">你們已經是好友囉，真巧。</p></div>');
+				scrollToBottom();
 			});
 			
 			socket.on('friend request', function(data){
@@ -120,14 +128,17 @@
 					'<button class="btn btn-danger" id="agreeBtn">同意</button>  ' + 
 					'<button class="btn btn-danger" id="disagreeBtn">拒絕</button>' + 
 					'</div>');
+				scrollToBottom();
 				$('#agreeBtn').on('click', function(){
 					console.log("agree clicked");
 					socket.emit('check friend', null, function(data){
 						console.log("check friend callback");
 						if(data===false){
 							$chat.append('<div class="leave"><p class="leave-msg">加入好友失敗</p></div>');
+							scrollToBottom();
 						} else{
 							$chat.append('<div class="leave"><p class="leave-msg">已加入好友</p></div>');
+							scrollToBottom();
 						}
 						$('#agreeBtn').hide();
 						$('#disagreeBtn').hide();
@@ -138,11 +149,13 @@
 					$chat.append('<div class="leave"><p class="leave-msg">您已拒絕邀請</p></div>');
 					$('#agreeBtn').hide();
 					$('#disagreeBtn').hide();
+					scrollToBottom();
 				});
 			});
 			
 			socket.on('fuck you', function(data){
 				$chat.append('<div class="leave"><p class="leave-msg">對方拒絕您的邀請</p></div>');
+				scrollToBottom();
 			});
 			
 			socket.on('topics', function(data){

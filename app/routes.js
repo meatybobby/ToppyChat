@@ -104,7 +104,8 @@ module.exports = function(app, passport) {
 					res.render('profile.ejs', {
 						user : req.user, // get the user out of session and pass to template
 						page_name: 'profile',
-						message: 'No user'
+						message: 'No user found.',
+						success: false
 					});
 				}
 			
@@ -113,7 +114,8 @@ module.exports = function(app, passport) {
 					res.render('profile.ejs', {
 						user : req.user, // get the user out of session and pass to template
 						page_name: 'profile',
-						message: 'Password fault'
+						message: 'Please enter your current password to change your profile.',
+						success: false
 					});
 				}
 			
@@ -128,7 +130,12 @@ module.exports = function(app, passport) {
 					newUser.save(function(err) {
 						if (err)
 							throw err;
-						return res.redirect('/profile');
+						return res.render('profile.ejs',{
+							user: newUser,
+							page_name: 'profile',
+							message: 'Your profile has been updated.',
+							success: true
+						});
 					});
 				}
 			});

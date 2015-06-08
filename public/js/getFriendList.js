@@ -1,9 +1,9 @@
 $(function () {
-	var friendList = ['David', 'Mark', 'Jason', 'Luke', 'Tina', 'Marry'];
+	/*var friendList = ['David', 'Mark', 'Jason', 'Luke', 'Tina', 'Marry'];
 	for(var i=0; i<friendList.length; i++) {
 		var str = '<li class="list-group-item"><span class="friend">'+friendList[i]+'</span><div class="signal online"></div></li>';
 		$('ul#friendList li:last-child').after(str);
-	}
+	}*/
 	
 	/***
 	 <li class="list-group-item">David</li>
