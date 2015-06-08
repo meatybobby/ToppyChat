@@ -60,6 +60,10 @@ exports.open = function(server,mongoStore) {
 		socket.on('invite friend',function(data) {
 			console.log('invite sent to server');
 			var strangeUser = stranger[socket.id].request.user;
+			if(strangeUser.userid==socket.request.user.userid) {
+				socket.emit('invite self',null);
+				return;
+			}
 			User.findOne({ 'userid' :  socket.request.user.userid }, function(err, user) {
 				if(err) return;
 				if(!user) return;

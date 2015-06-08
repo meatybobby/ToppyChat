@@ -1,36 +1,5 @@
 // app/routes.js
 var User  = require('./models/user');
-function deleteFriend(deleteid,friendid,res,st) {
-	User.findOne({ 'userid' :  deleteid }, function(err, user) {
-		// if there are any errors, return the error before anything else
-		if (err) {
-			return res.status(400).send('Fail');
-		}
-	
-		// if no user is found, return the message
-		else if (!user) {
-			return res.status(400).send('Fail');
-		}
-	
-		// all is well, return successful user
-		else {
-			var newUser = user;
-			find=newUser.friends.indexOf(friendid);
-			if(find!=-1) {
-				newUser.friends.splice(find,1);
-				// save the user
-				newUser.save(function(err) {
-					if (err)
-						throw err;
-					if(st) deleteFriend(friendid,deleteid,res,0);
-					else {
-						res.status(200).send('OK');
-					}
-				});
-			}
-		}
-	});
-}
 module.exports = function(app, passport) {
 
     // =====================================
@@ -180,7 +149,17 @@ module.exports = function(app, passport) {
 			var deleteUser=req.user.userid;
 			deleteFriend(deleteUser,req.params.friend_id,res,1);
 		}
-		else res.redirect('/profile');
+		else res.redirect('/');
+	});
+	
+	app.get('/friends',function(req,res) {
+		if(req.isAuthenticated()) {
+			var friendnick = {};
+			var nick;
+			var friends=req.user.friends;
+			findNick(0,friends,friendnick,res);
+		}
+		else res.redirect('/');
 	});
 	
 	app.use("*",function(req,res){
@@ -197,4 +176,53 @@ function isLoggedIn(req, res, next) {
 
     // if they aren't redirect them to the home page
     res.redirect('/');
+}
+
+function deleteFriend(deleteid,friendid,res,st) {
+	User.findOne({ 'userid' :  deleteid }, function(err, user) {
+		// if there are any errors, return the error before anything else
+		if (err) {
+			return res.status(400).send('Fail');
+		}
+	
+		// if no user is found, return the message
+		else if (!user) {
+			return res.status(400).send('Fail');
+		}
+	
+		// all is well, return successful user
+		else {
+			var newUser = user;
+			find=newUser.friends.indexOf(friendid);
+			if(find!=-1) {
+				newUser.friends.splice(find,1);
+				// save the user
+				newUser.save(function(err) {
+					if (err)
+						throw err;
+					if(st) deleteFriend(friendid,deleteid,res,0);
+					else {
+						res.status(200).send('OK');
+					}
+				});
+			}
+		}
+	});
+}
+
+function findNick(i,friends,fnick,res) {
+	User.findOne({ 'userid' :  friends[i] }, function(err, user) {
+		// if there are any errors, return the error before anything else
+		if (err) {
+			return;
+		}
+	
+		// if no user is found, return the message
+		else if (!user) {
+			return;
+		}
+		fnick[friends[i]]=user.nickname;
+		if(i!=friends.length-1) findNick(i+1,friends,fnick,res);
+		else res.status(200).send(fnick);
+	});
 }
