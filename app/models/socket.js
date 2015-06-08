@@ -2,6 +2,7 @@ var topics = {},/*id-> topic*/
 	stranger = {};/* my id-> his socket*/
 var cookieParser = require('cookie-parser'),passport = require('passport');
 var User  = require('./user');
+var Message = require('./message');
 var onlineUser = {};
 exports.open = function(server,mongoStore) {
 	var io = require('socket.io').listen(server);
@@ -13,7 +14,7 @@ exports.open = function(server,mongoStore) {
 				passport.initialize()(socket.request,null,function() {
 					passport.session()(socket.request,null,function() {
 						if(socket.request.user) {
-							onlineUser[socket.request.user.userid]=socket.id;
+							onlineUser[socket.request.user.userid]=socket;
 							next(null,true);
 						}
 						else {
@@ -25,8 +26,9 @@ exports.open = function(server,mongoStore) {
 		});
 	});
 	io.sockets.on('connection', function(socket) {
+		var tempMessage = {};
 		updateTopics();
-		io.sockets.emit('online',socket.request.user._id);
+		io.sockets.emit('online',socket.request.user.userid);
 		socket.on('new topic', function(data, callback){
 			socket.topic = data;
 			topics[socket.id] = data;
@@ -116,7 +118,14 @@ exports.open = function(server,mongoStore) {
 			stranger[socket.id].emit('fuck you',null);
 		});
 		
+		socket.on('talk',function(data,id) {
+			tempMessage.push(data);
+			if(onlineUser[id])
+				onlineUser[id].emit('receive',data);
+		});
+		
 		socket.on('disconnect', function(data) {
+			delete onlineUser[socket.request.user.userid];
 			if(!socket.topic && !stranger[socket.id]) return;
 			if(socket.topic) {
 				delete topics[socket.id];
