@@ -66,8 +66,15 @@ exports.open = function(server,mongoStore) {
 				if(!user) return;
 				if(!stranger[socket.id]) return;
 				var newUser = user;
-				if(user.friends.indexOf(strangeUser._id)!=-1) socket.emit('already friend',null);
-				else stranger[socket.id].emit('friend request', null);
+				if(user.friends.indexOf(strangeUser.userid)!=-1) {
+					console.log('already friend');
+					socket.emit('already friend',null);
+					
+				}
+				else {
+					console.log('friend request sent');
+					stranger[socket.id].emit('friend request', null);
+				}
 			});
 		});
 		
