@@ -144,8 +144,8 @@ ul#friendList li:not(:first-of-type):hover{
 	border-radius: 50%;
 	background: #F48FB1;
 	display: inline-block;
-	float: right;
-	margin-right: 20px;
+	/*float: right;*/
+	margin-left: 20px;
 }
 .signal.online{
 	background:#AED581;
@@ -154,9 +154,10 @@ ul#friendList li:not(:first-of-type):hover{
 	display: inline-block;
 	background: gray;
 	color: white;
-	padding: 3px;
+	padding: 2px;
 	border-radius: 3px;
 	cursor: pointer;
+	float: right;
 }
 ul.friendid li{
 	margin-top: 10px;

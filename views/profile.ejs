@@ -44,32 +44,7 @@
 						</form>
 						
                     </p>
-					<p>
-						your id:<br>
-						<b><%= user._id  %></b>
-					</p>
-					<p>
-						<table class="friend-table">
-							<thead>
-								<tr>
-									<th>your friends:</th>
-								</tr>
-							</thead>
-							<tbody>
-								<% for(var i=0; i<user.friends.length; i++) { %>
-									<tr>
-										<td><%= user.friends[i] %></td> 
-										<td><div class="delete-btn" id="<%= user.friends[i] %>">delete</div></td>
-									</tr>
-								<% } %>
-							</tbobdy>
-							
-							<ul class="friendid">
-							
-							</ul>
-						</table>
-						
-					</p>
+				
 
             </div>
         </div>
