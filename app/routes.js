@@ -138,6 +138,7 @@ module.exports = function(app, passport) {
     });
 	
 	app.delete('/friends/:friend_id',function(req,res) {
+		var deleteUser=req.user.userid;
 		if(req.isAuthenticated()) {
 			User.findOne({ 'userid' :  req.user.userid }, function(err, user) {
 				// if there are any errors, return the error before anything else
@@ -154,6 +155,32 @@ module.exports = function(app, passport) {
 				else {
 					var newUser = user;
 					find=newUser.friends.indexOf(req.params.friend_id);
+					if(find!=-1) {
+						newUser.friends.splice(find,1);
+						// save the user
+						newUser.save(function(err) {
+							if (err)
+								throw err;
+							return res.redirect('/');
+						});
+					}
+				}
+			});
+			User.findOne({ 'userid' :  req.params.friend_id }, function(err, user) {
+				// if there are any errors, return the error before anything else
+				if (err) {
+					return res.redirect('/');
+				}
+			
+				// if no user is found, return the message
+				else if (!user) {
+					return res.redirect('/');
+				}
+			
+				// all is well, return successful user
+				else {
+					var newUser = user;
+					find=newUser.friends.indexOf(req.params.deleteUser);
 					if(find!=-1) {
 						newUser.friends.splice(find,1);
 						// save the user

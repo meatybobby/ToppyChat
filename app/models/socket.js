@@ -13,7 +13,7 @@ exports.open = function(server,mongoStore) {
 				passport.initialize()(socket.request,null,function() {
 					passport.session()(socket.request,null,function() {
 						if(socket.request.user) {
-							onlineUser[socket.request.user._id]=socket.id;
+							onlineUser[socket.request.user.userid]=socket.id;
 							next(null,true);
 						}
 						else {
