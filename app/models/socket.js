@@ -72,13 +72,13 @@ exports.open = function(server,mongoStore) {
 					callback(false);
 					return;
 				}
-				if(user.friends.indexOf(strangeUser._id)!=-1) {
+				if(user.friends.indexOf(strangeUser.userid)!=-1) {
 					socket.emit('already friend',null);
 					callback(false);
 					return;
 				}
 				var newUser = user;
-				newUser.friends.push(strangeUser._id);
+				newUser.friends.push(strangeUser.userid);
 				newUser.save(function(err) {
 					if (err){
 						callback(false);
@@ -91,13 +91,13 @@ exports.open = function(server,mongoStore) {
 					callback(false);
 					return;
 				}
-				if(user.friends.indexOf(strangeUser._id)!=-1) {
+				if(user.friends.indexOf(socket.request.user.userid)!=-1) {
 					socket.emit('already friend',null);
 					callback(false);
 					return;
 				}
 				var newUser = user;
-				newUser.friends.push(socket.request.user._id);
+				newUser.friends.push(socket.request.user.userid);
 				newUser.save(function(err) {
 					if (err){
 						callback(false);
@@ -114,7 +114,7 @@ exports.open = function(server,mongoStore) {
 		
 		socket.on('disconnect', function(data) {
 			if(!socket.topic && !stranger[socket.id]) return;
-			if(socket.topic){
+			if(socket.topic) {
 				delete topics[socket.id];
 				updateTopics();
 			}
@@ -126,8 +126,6 @@ exports.open = function(server,mongoStore) {
 				
 			}
 			
-			
-			//nicknames.splice(nicknames.indexOf(socket.nickname),1);
 		});
 	});
 }

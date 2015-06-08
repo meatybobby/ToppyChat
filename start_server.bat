@@ -1,2 +1,2 @@
-cd C:\Users\Douglas\Documents\NTHU\Web\final\Toppy-Chat-remote\ToppyChat
+cd C:\Users\Bobby\Desktop\ToppyChat
 nodemon server.js
