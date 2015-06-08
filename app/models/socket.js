@@ -29,9 +29,8 @@ exports.open = function(server,mongoStore) {
 	});
 	io.sockets.on('connection', function(socket) {
 		var tempMessage = [];
-		socket.emit('online user',online);
+		io.sockets.emit('online',online);
 		updateTopics();
-		io.sockets.emit('online',socket.request.user.userid);
 		socket.on('new topic', function(data, callback){
 			socket.topic = data;
 			topics[socket.id] = data;
@@ -139,7 +138,7 @@ exports.open = function(server,mongoStore) {
 			delete onlineUser[socket.request.user.userid];
 			var find = online.indexOf(socket.request.user.userid);
 			online.splice(find,1);
-			io.sockets.emit('offline',socket.request.user.userid);
+			io.sockets.emit('online',online);
 			if(!socket.topic && !stranger[socket.id]) return;
 			if(socket.topic) {
 				delete topics[socket.id];
