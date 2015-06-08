@@ -18,7 +18,7 @@
 					<% for(var i=0; i<user.friends.length; i++) { %>
 						<li class="list-group-item" id="li-<%= user.friends[i] %>">
 							<span class="friend"><%= user.friends[i] %></span>
-							<div class="signal online"></div>
+							<div class="signal" id="signal-<%= user.friends[i] %>"></div>
 						</li>
 					<% } %>
 				</ul>
@@ -84,6 +84,14 @@
 			var $topics = $('#topics');
 			var $addBtn = $('#addBtn');
 			var $sendBtn = $('#sendMsg');
+			
+			/**看誰上線*/
+			socket.on('online', function(data){
+				$('li.list-group-item .signal').removeClass('online');
+				for(var i=0; i<data.length; i++) {
+					$('li.list-group-item #signal-'+data[i]).addClass('online');
+				}
+			});
 			
 			/**跟朋友聊天*/
 			$('.tab-content').on('keypress', '.chatWrap-friend #message-friend', function(e){
