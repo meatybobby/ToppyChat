@@ -124,7 +124,7 @@ exports.open = function(server,mongoStore) {
 		socket.on('talk',function(data,id) {
 			tempMessage.push(data);
 			if(onlineUser[id])
-				onlineUser[id].emit('receive',data);
+				onlineUser[id].emit('receive',{ data : data , id : socket.req.user.userid });
 		});
 		
 		socket.on('disconnect', function(data) {
