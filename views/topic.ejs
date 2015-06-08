@@ -19,7 +19,7 @@
 						<li class="list-group-item" id="li-<%= user.friends[i] %>">
 							<span class="friend"><%= user.friends[i] %></span>
 							<div class="signal" id="signal-<%= user.friends[i] %>"></div>
-							<div class="delete-btn" id="<%= user.friends[i] %>">delete</div>
+							<div class="delete-btn" id="d_<%= user.friends[i] %>">delete</div>
 						</li>
 					<% } %>
 				</ul>
@@ -117,9 +117,7 @@
 				
 			});
 			socket.on('receive from friend', function(data){
-				$('ul#friendList li#li-' + data.id).trigger('click', function(){
-					$('ul#myTab li#li'+data.id).trigger('click');
-				});
+				$('ul#friendList li#li-' + data.id).trigger('click');
 				
 				
 				//$('ul#friendList li#' + data.id)
