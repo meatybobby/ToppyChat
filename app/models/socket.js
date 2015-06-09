@@ -132,8 +132,7 @@ exports.open = function(server,mongoStore) {
 		});
 		
 		socket.on('talk to friend',function(data) {
-			console.log('talk to friend: ' + data.id+'   msg:' + data.msg);
-			tempMessage.push(data);
+			
 			if(onlineUser[data.id])
 				onlineUser[data.id].emit('receive from friend',{msg: data.msg, id: socket.request.user.userid});
 		});
