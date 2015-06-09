@@ -7,15 +7,15 @@ $(function () {
 		return false;
 	});
 	
-	$('ul.nav.navbar-nav li').click(function(){
+	/*$('ul.nav.navbar-nav li').click(function(){
 		
 		$(this).addClass('active');
-	});
+	});*/
 	
 	
 	$('.delete-btn').on('click', function(e){
 		e.stopPropagation();
-		var id = $(this).prop('id');
+		var id = $(this).prop('id').slice(2);
 		console.log("delete click!");
 		if(confirm('確定刪除 '+id+' ?')) {
 			
@@ -31,6 +31,7 @@ $(function () {
 				}			
 			});
 		}
+		return false;
 	
 	});
 });
