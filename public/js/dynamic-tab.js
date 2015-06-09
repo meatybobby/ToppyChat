@@ -1,13 +1,43 @@
 var inTabs = [];
+var unreadMsg = [];
 $(function () {
 	
 	
-	$('ul#friendList li:not(:first-of-type)').on('click', function () { // Click event on the "Add Tab" button
+	$('ul#friendList .friend-list-item').on('click', function () { // Click event on the "Add Tab" button
 		//var nbrLiElem = ($('ul#myTab li').length) - 1; // Count how many <li> there are (minus 1 because one <li> is the "Add Tab" button)
+		$(this).removeClass('unread');
 		var friendName = $(this).find('.friend').html();
 		//console.log(inTabs);
+
 		if(inTabs.indexOf(friendName)== -1 ){ //not added
 			inTabs.push(friendName);
+			/**the content (對話紀錄)*/
+			var chatWindow = '<div class="panel panel-default chatWrap-friend">'+
+								'<div class="chat-friend" id="'+friendName+'"></div>'+
+									'<div id="send-message-friend" class="form-inline">'+
+										'<input class="form-control" id="message-friend" autocomplete="off" />'+
+										'<button type="button" class="btn btn-default sendMsg-friend" id="'+friendName+'">傳送</button>'+
+									'</div>'+
+							 '</div>';
+			//var chatWindow = friendName;
+			
+			$('div.tab-content div[role="tabpanel"]').removeClass('active');
+			$('div.tab-content div[role="tabpanel"]:last-child').after('<div role="tabpanel" class="tab-pane fade in active" id="' + friendName + '">'+ chatWindow +'</div>');
+			
+			
+			
+			/**載入未讀訊息**/
+
+			var $chatFriendBox = $('.chat-friend#' + friendName);
+			for(var i=0; i<unreadMsg.length; i++){
+				if(unreadMsg[i].sendid==friendName)
+					var msg = escapeHtml(unreadMsg[i].message);
+					var item=$('<p class="triangle-isosceles left msg stranger-msg">' + msg + '</p>').hide().fadeIn(200);
+					$chatFriendBox.append(item);
+					scrollToBottom($chatFriendBox);
+			}
+		
+			
 			$('li[role="presentation"]').removeClass('active');
 			$('ul#myTab li:last-child').after(
 				'<li role="presentation" id="li' + friendName + '" class="active">' + 
@@ -37,21 +67,6 @@ $(function () {
 				}
 				
 			});
-		
-			/**the content (對話紀錄)*/
-			
-			var chatWindow = '<div class="panel panel-default chatWrap-friend">'+
-								'<div class="chat-friend" id="'+friendName+'"></div>'+
-									'<div id="send-message-friend" class="form-inline">'+
-										'<input class="form-control" id="message-friend" autocomplete="off" />'+
-										'<button type="button" class="btn btn-default sendMsg-friend" id="'+friendName+'">傳送</button>'+
-									'</div>'+
-							 '</div>';
-			//var chatWindow = friendName;
-			
-			$('div.tab-content div[role="tabpanel"]').removeClass('active');
-			$('div.tab-content div[role="tabpanel"]:last-child').after('<div role="tabpanel" class="tab-pane fade in active" id="' + friendName + '">'+ chatWindow +'</div>');
-			
 		}
 			
 	});

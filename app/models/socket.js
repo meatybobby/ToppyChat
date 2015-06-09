@@ -177,6 +177,7 @@ exports.open = function(server,mongoStore) {
 			query.sort({'time':1});
 			query.exec(function(err,message) {
 				if(message) socket.emit('unread',message);
+				console.log(message);
 			});
 		}
 	});
