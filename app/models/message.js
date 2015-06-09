@@ -7,6 +7,8 @@ var messageSchema = mongoose.Schema({
 	sendid : String,
 	receiveid : String,
 	message : String,
+	time : Number,
+	read : Boolean,
 
 });
 
