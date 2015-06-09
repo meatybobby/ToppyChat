@@ -3,13 +3,14 @@ $(function () {
 	
 	
 	$('ul#friendList li:not(:first-of-type)').on('click', function () { // Click event on the "Add Tab" button
-		var nbrLiElem = ($('ul#myTab li').length) - 1; // Count how many <li> there are (minus 1 because one <li> is the "Add Tab" button)
+		//var nbrLiElem = ($('ul#myTab li').length) - 1; // Count how many <li> there are (minus 1 because one <li> is the "Add Tab" button)
 		var friendName = $(this).find('.friend').html();
 		//console.log(inTabs);
 		if(inTabs.indexOf(friendName)== -1 ){ //not added
 			inTabs.push(friendName);
+			$('li[role="presentation"]').removeClass('active');
 			$('ul#myTab li:last-child').after(
-				'<li role="presentation" id="li' + friendName + '">' + 
+				'<li role="presentation" id="li' + friendName + '" class="active">' + 
 					'<a href="#' + friendName + '" role="tab" data-toggle="tab" aria-controls="'+friendName+'">'
 					+friendName+ ' <button type="button" class="btn btn-info btn-xs">'+
 					'<span class="glyphicon glyphicon-remove"></span></button></a></li>'
@@ -17,11 +18,13 @@ $(function () {
 			
 			
 			$('li#li'+friendName+' button').on('click' , function(e){
-				
+				e.stopPropagation();
+				e.preventDefault();
 				removeTab(friendName);
 				var idx = inTabs.indexOf(friendName);
 				inTabs.splice(idx, 1);
-				if(inTabs.length==0) {
+				var rr = $(this).parent().parent().hasClass('active');
+				if(inTabs.length==0 || rr) {
 					console.log('all empty!');
 					//if(!$('li#li1').hasClass('active')){
 						//console.log("topic");
@@ -44,8 +47,10 @@ $(function () {
 										'<button type="button" class="btn btn-default sendMsg-friend" id="'+friendName+'">傳送</button>'+
 									'</div>'+
 							 '</div>';
+			//var chatWindow = friendName;
 			
-			$('div.tab-content div[role="tabpanel"]:last-child').after('<div role="tabpanel" class="tab-pane fade in" id="' + friendName + '">'+ chatWindow +'</div>');
+			$('div.tab-content div[role="tabpanel"]').removeClass('active');
+			$('div.tab-content div[role="tabpanel"]:last-child').after('<div role="tabpanel" class="tab-pane fade in active" id="' + friendName + '">'+ chatWindow +'</div>');
 			
 		}
 			
@@ -54,7 +59,7 @@ $(function () {
  
 function removeTab(liElem) { // Function remove tab with the <li> number
 		$('ul#myTab > li#li' + liElem).fadeOut(100, function () { 
-			$(this).removeClass('active');
+			//$(this).removeClass('active');
 			$(this).remove(); // Remove the <li></li> with a fadeout effect
 			//$('#messagesAlert').text(''); // Empty the <div id="messagesAlert"></div>
 		});
