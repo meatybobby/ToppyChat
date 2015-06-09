@@ -2,7 +2,7 @@
 <html>
 <head>
 	
-	<title>chat</title>
+	<title>ToppyChat</title>
 	<% include /partials/head %>
 	
 </head>
@@ -88,6 +88,8 @@
 			var $topics = $('#topics');
 			var $addBtn = $('#addBtn');
 			var $sendBtn = $('#sendMsg');
+			
+			socket_ref = socket; /**for the socket emit in dynamic-tab.js*/
 			
 			/**看誰上線*/
 			socket.on('online', function(data){
@@ -270,7 +272,10 @@
 				// 
 				
 			});
+			
+			/**未讀訊息**/
 			socket.on('unread', function(data) {
+				
 				unreadMsg = [];
 				for(var i=0; i<data.length; i++) {
 					unreadMsg.push(data[i]);
@@ -278,7 +283,6 @@
 					$('.friend-list-item#li-'+data[i].sendid).addClass('unread');
 					
 				}
-				
 				//console.log(unreadMsg);
 			});
 			 

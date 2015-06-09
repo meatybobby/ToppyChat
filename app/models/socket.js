@@ -128,13 +128,21 @@ exports.open = function(server,mongoStore) {
 			stranger[socket.id].emit('fuck you',null);
 		});
 		
-		socket.on('click friend',function(id) {
-			var query=Message.find({'receiveid' : socket.request.user.userid,'sendid' : id});
-			query.sort({'time':1});
-			query.exec(function(err,message) {
-				if(err) throw err;
-				if(message) socket.emit('message log',message);
+		socket.on('get msg',function(id, callback) {
+			var query=Message.find({});
+			query.or([{'receiveid' : socket.request.user.userid, 'sendid' : id}, {'receiveid' : id, 'sendid' : socket.request.user.userid}])
+			     .sort({'time':1})
+				 .exec(function(err,message) {
+				if(err) {
+					throw err;
+					callback(null);
+				}
+				if(message) callback(message);
 			});
+			
+		});
+		
+		socket.on('read msg', function(id){
 			Message.update({'receiveid' : socket.request.user.userid,'sendid' : id,'read':false},{'read':true},{multi : true},function(err,data) {
 				if(err) throw err;
 			});
