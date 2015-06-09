@@ -1,13 +1,14 @@
 var inTabs = [];
 var unreadMsg = [];
+var socket_ref = {};
 $(function () {
 	
 	
 	$('ul#friendList .friend-list-item').on('click', function () { // Click event on the "Add Tab" button
 		//var nbrLiElem = ($('ul#myTab li').length) - 1; // Count how many <li> there are (minus 1 because one <li> is the "Add Tab" button)
+		
 		$(this).removeClass('unread');
 		var friendName = $(this).find('.friend').html();
-		//console.log(inTabs);
 
 		if(inTabs.indexOf(friendName)== -1 ){ //not added
 			inTabs.push(friendName);
@@ -26,16 +27,29 @@ $(function () {
 			
 			
 			
-			/**載入未讀訊息**/
+			/**載入所有訊息**/
+			socket_ref.emit('read msg', friendName);/**未讀設成已讀*/
+			socket_ref.emit('get msg', friendName, function(data){
+				if(data){
+					var $chatFriendBox = $('.chat-friend#' + friendName);
+					for(var i=0; i<data.length; i++){
+						var msg = escapeHtml(data[i].message);
+						//var item=$('<p class="triangle-isosceles left msg stranger-msg">' + msg + '</p>').hide().fadeIn(200);
+						var item;
+						if(data[i].sendid==friendName)
+							item = $('<p class="triangle-isosceles left msg stranger-msg">' + msg + '</p>');
+						else
+							item = $('<p class="triangle-isosceles right msg you-msg">' + msg + '</p>');
+						$chatFriendBox.append(item);
+						scrollToBottom($chatFriendBox);
+					}
+				}
+				else{
+					alert('load messages error!');
+				}
+			});
 
-			var $chatFriendBox = $('.chat-friend#' + friendName);
-			for(var i=0; i<unreadMsg.length; i++){
-				if(unreadMsg[i].sendid==friendName)
-					var msg = escapeHtml(unreadMsg[i].message);
-					var item=$('<p class="triangle-isosceles left msg stranger-msg">' + msg + '</p>').hide().fadeIn(200);
-					$chatFriendBox.append(item);
-					scrollToBottom($chatFriendBox);
-			}
+			
 		
 			
 			$('li[role="presentation"]').removeClass('active');
