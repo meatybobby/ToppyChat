@@ -128,6 +128,10 @@ exports.open = function(server,mongoStore) {
 			stranger[socket.id].emit('fuck you',null);
 		});
 		
+		socket.on('click friend',function(id) {
+			
+		});
+		
 		socket.on('talk to friend',function(data) {
 			var newMessage = new Message();
 			var now = new Date();
