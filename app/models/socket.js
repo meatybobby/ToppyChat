@@ -129,7 +129,15 @@ exports.open = function(server,mongoStore) {
 		});
 		
 		socket.on('click friend',function(id) {
-			
+			var query=Message.find({'receiveid' : socket.request.user.userid,'sendid' : id});
+			query.sort({'time':1});
+			query.exec(function(err,message) {
+				if(err) throw err;
+				if(message) socket.emit('message log',message);
+			});
+			Message.update({'receiveid' : socket.request.user.userid,'sendid' : id,'read':false},{'read':true},{multi : true},function(err,data) {
+				if(err) throw err;
+			});
 		});
 		
 		socket.on('talk to friend',function(data) {
@@ -141,9 +149,9 @@ exports.open = function(server,mongoStore) {
 			newMessage.message = data.msg;
 			if(onlineUser[data.id]) {
 				onlineUser[data.id].emit('receive from friend',{msg: data.msg, id: socket.request.user.userid});
-				newMessage.read = 1;
+				newMessage.read = true;
 			}
-			else newMessage.read = 0;
+			else newMessage.read = false;
 			newMessage.save(function(err) {
 				if(err) {
 					throw err;
@@ -177,11 +185,10 @@ exports.open = function(server,mongoStore) {
 		}
 		
 		function unread() {
-			var query=Message.find({'receiveid' : socket.request.user.userid});
+			var query=Message.find({'receiveid' : socket.request.user.userid , "read" : false});
 			query.sort({'time':1});
 			query.exec(function(err,message) {
 				if(message) socket.emit('unread',message);
-				console.log(message);
 			});
 		}
 	});
