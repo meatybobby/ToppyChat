@@ -27,9 +27,10 @@ $(function () {
 			socket_ref.emit('read msg', friendName);/**未讀設成已讀*/
 			socket_ref.emit('get msg', friendName, function(data){
 				if(data){
+					console.log(data);
 					var $chatFriendBox = $('.chat-friend#' + friendName);
 					for(var i=0; i<data.length; i++){
-						var msg = data[i].message;
+						var msg =  escapeHtml(data[i].message);
 						//var item=$('<p class="triangle-isosceles left msg stranger-msg">' + msg + '</p>').hide().fadeIn(200);
 						var item;
 						if(data[i].sendid==friendName)

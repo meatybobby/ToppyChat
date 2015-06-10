@@ -46,7 +46,8 @@
 
 /* Vertical menu that slides from the left or right */
 #show-friend{
-	background:  #afdefa;
+	background:  #47a3da;
+	color: white;
 	z-index: 3;
 	position: fixed;
 	top: 65px;

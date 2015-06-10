@@ -41,6 +41,7 @@
 			<div id="show-friend"><span class="glyphicon glyphicon-user"></span> Friend</div>
 		</div>
 		<div class="row">
+			<!--old friend list-->
 			<!--div class="col-md-3" id="friendListArea">
 				<ul class="list-group" id="friendList">
 				  <li class="list-group-item friend-list-title">好友列表</li>
@@ -141,8 +142,8 @@
 				var $chatFriendBox = $(this).parent().parent().find('.chat-friend');
 				var $msgFriend = $(this).parent().find('#message-friend');
 				if($msgFriend.val()!=''){
-					var msgTxt = escapeHtml($msgFriend.val());
-					var item=$('<p class="triangle-isosceles right msg you-msg">' + msgTxt + '</p>').hide().fadeIn(200);
+					var msgTxt = $msgFriend.val();
+					var item=$('<p class="triangle-isosceles right msg you-msg">' + escapeHtml(msgTxt) + '</p>').hide().fadeIn(200);
 					$chatFriendBox.append(item);
 					scrollToBottom($chatFriendBox);
 					socket.emit('talk to friend', {msg: msgTxt, id: id}  );
