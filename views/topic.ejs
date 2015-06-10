@@ -176,7 +176,7 @@
 						$('#createWrap').hide();
 						$('#topicWrap').hide();
 						$('#chatWrap').show();
-						var str = '已建立主題：<div class="topic">'+topicStr+'</div><p>等待陌生人...</p>'
+						var str = '已建立主題：<div class="topic">'+escapeHtml(topicStr)+'</div><p>等待陌生人...</p>'
 						
 						$chat.html(str);
 					});
@@ -260,7 +260,7 @@
 					$('#createWrap').hide();
 					$('#topicWrap').hide();
 					$('#chatWrap').show();
-					$chat.html('您已進入：<div class="topic">' + data + '</div><br/>');
+					$chat.html('您已進入：<div class="topic">' + escapeHtml(data) + '</div><br/>');
 					$msgBox.prop('disabled', false);
 					$addBtn.prop('disabled', false);
 					$sendBtn.prop('disabled', false);
