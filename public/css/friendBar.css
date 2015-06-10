@@ -1,0 +1,96 @@
+/* General styles for all menus */
+.cbp-spmenu {
+	background: #47a3da;
+	position: fixed;
+}
+
+.cbp-spmenu h3 {
+	color: #afdefa;
+	font-size: 1.9em;
+	padding: 20px;
+	margin: 0;
+	font-weight: 300;
+	background: #0d77b6;
+}
+
+.cbp-spmenu a {
+	display: block;
+	color: #fff;
+	font-size: 1.1em;
+	font-weight: 300;
+	text-decoration: none;
+}
+
+.cbp-spmenu a.friend-list-item:hover {
+	background: #258ecd;
+}
+
+.cbp-spmenu a:active {
+	/*background: #afdefa;
+	color: #47a3da;*/
+}
+
+/* Orientation-dependent styles for the content of the menu */
+
+.cbp-spmenu-vertical {
+	width: 240px;
+	height: 80%;
+	top: 50px;
+	z-index: 1;
+}
+
+.cbp-spmenu-vertical a {
+	border-bottom: 1px solid #258ecd;
+	padding: 1em;
+}
+
+/* Vertical menu that slides from the left or right */
+#show-friend{
+	background:  #afdefa;
+	z-index: 3;
+	position: fixed;
+	top: 65px;
+	display: inline-block;
+	left: 0;
+	cursor: pointer;
+	padding: 5px;
+}
+#show-friend.open{
+	left: 240px;
+}
+#close-friend-list{
+	float: right;
+	margin: 5px;
+	color:  #afdefa;
+	cursor: pointer;
+}
+.cbp-spmenu-left {
+	left: -240px;
+}
+
+.cbp-spmenu-left.cbp-spmenu-open {
+	left: 0px;
+}
+
+/* Transitions */
+
+.cbp-spmenu,
+.cbp-spmenu-push,
+#show-friend {
+	-webkit-transition: all 0.3s ease;
+	-moz-transition: all 0.3s ease;
+	transition: all 0.3s ease;
+}
+
+/* Example media queries */
+@media screen and (max-height: 26.375em){
+
+	.cbp-spmenu-vertical {
+		font-size: 90%;
+		width: 190px;
+	}
+
+	.cbp-spmenu-left {
+		left: -190px;
+	}
+}
