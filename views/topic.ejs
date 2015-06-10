@@ -20,7 +20,9 @@
 					<% } else { %>
 					<% for(var i=0; i<user.friends.length; i++) { %>
 						<a class="friend-list-item" id="li-<%= user.friends[i] %>">
-							<span class="friend"><%= user.friends[i] %></span>
+							<span class="nickname"></span>
+							<span class="friend">(<%= user.friends[i] %>)</span>
+							
 							<div class="signal" id="signal-<%= user.friends[i] %>"></div>
 							<div class="delete-btn" id="d_<%= user.friends[i] %>">刪除</div>
 						</a>

@@ -1,10 +1,15 @@
 var inTabs = [];
 var unreadMsg = [];
 var socket_ref = {};
+var id_to_nick = {};
 $(function () {
 	
 	$('nav#friend-list a.friend-list-item').on('click', function(){
-		var friendName = $(this).find('.friend').html();
+		var str = $(this).find('.friend').html().toString();
+		var friendName = str.substr(1,str.length-2);
+		var friendNick = $(this).find('.nickname').html();
+		//console.log(str);
+		//console.log(friendName);
 		
 		if(inTabs.indexOf(friendName)== -1 ){ //not added
 			inTabs.push(friendName);
@@ -53,7 +58,7 @@ $(function () {
 			$('ul#myTab li:last-child').after(
 				'<li role="presentation" id="li' + friendName + '" class="active">' + 
 					'<a href="#' + friendName + '" role="tab" data-toggle="tab" aria-controls="'+friendName+'">'
-					+friendName+ ' <button type="button" class="btn btn-info btn-xs">'+
+					+friendNick+ ' <button type="button" class="btn btn-info btn-xs">'+
 					'<span class="glyphicon glyphicon-remove"></span></button></a></li>'
 			);
 			

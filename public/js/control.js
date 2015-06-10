@@ -1,3 +1,4 @@
+
 $(function () {
 	$('#show-friend').click(function(){
 		$(this).addClass('open').hide();
@@ -40,7 +41,20 @@ $(function () {
 		
 		$(this).addClass('active');
 	});*/
-	
+	$.ajax({
+		url: '/friends',
+		type: 'GET',
+		success: function(result) {
+			// Do something with the result
+			//alert('成功刪除!');
+			//console.log(result);
+			for(var i=0; i<result.length; i++) {
+				id_to_nick[result[i].userid] = result[i].nickname;
+				$('#li-'+result[i].userid+' .nickname').html(result[i].nickname);
+			}
+			//console.log(id_to_nick);
+		}			
+	});
 	
 	$('.delete-btn').on('click', function(e){
 		e.stopPropagation();
