@@ -11,8 +11,37 @@
 		<% include /partials/navbar %>
 	</header>
 	<div class="container">
+		<div id="friendArea">
+			<nav class="cbp-spmenu cbp-spmenu-vertical cbp-spmenu-left" id="friend-list" style="overflow: auto">
+				<span class="glyphicon glyphicon-remove" id="close-friend-list"></span>
+				<h3>Friend</h3>
+				<% if(user.friends.length==0) { %>
+						<a>尚未加入任何好友</a>
+					<% } else { %>
+					<% for(var i=0; i<user.friends.length; i++) { %>
+						<a class="friend-list-item" id="li-<%= user.friends[i] %>">
+							<span class="friend"><%= user.friends[i] %></span>
+							<div class="signal" id="signal-<%= user.friends[i] %>"></div>
+							<div class="delete-btn" id="d_<%= user.friends[i] %>">刪除</div>
+						</a>
+				<% } } %>
+				<!--a href="#">Celery seakale</a>
+				<a href="#">Dulse daikon</a>
+				<a href="#">Zucchini garlic</a>
+				<a href="#">Catsear azuki bean</a>
+				<a href="#">Dandelion bunya</a>
+				<a href="#">Rutabaga</a>
+				<a href="#">Celery seakale</a>
+				<a href="#">Dulse daikon</a>
+				<a href="#">Zucchini garlic</a>
+				<a href="#">Catsear azuki bean</a>
+				<a href="#">Dandelion bunya</a>
+				<a href="#">Rutabaga</a-->
+			</nav>
+			<div id="show-friend"><span class="glyphicon glyphicon-user"></span> Friend</div>
+		</div>
 		<div class="row">
-			<div class="col-md-3" id="friendListArea">
+			<!--div class="col-md-3" id="friendListArea">
 				<ul class="list-group" id="friendList">
 				  <li class="list-group-item friend-list-title">好友列表</li>
 					<% if(user.friends.length==0) { %>
@@ -26,8 +55,9 @@
 						</li>
 					<% } } %>
 				</ul>
-			</div>
-			<div class="col-md-9" id="chatArea">
+			</div-->
+			
+			<div class="col-md-10 col-md-offset-1" id="chatArea">
 			
 				
 				<!-- Nav tabs from Bootstrap 3 -->
@@ -93,9 +123,9 @@
 			
 			/**看誰上線*/
 			socket.on('online', function(data){
-				$('li.list-group-item .signal').removeClass('online');
+				$('nav#friend-list a.friend-list-item .signal').removeClass('online');
 				for(var i=0; i<data.length; i++) {
-					$('li.list-group-item #signal-'+data[i]).addClass('online');
+					$('nav#friend-list a.friend-list-item #signal-'+data[i]).addClass('online');
 				}
 			});
 			
