@@ -144,6 +144,16 @@ module.exports = function(app, passport) {
 			res.redirect('/'); // load the index.ejs file
     });
 	
+	app.get('/friends', function(req, res){
+		if(req.isAuthenticated()){
+			res.render('friends.ejs', {
+				user : req.user, // get the user out of session and pass to template
+				page_name: 'friends'
+			});
+		}
+		else
+			res.redirect('/'); // load the index.ejs file
+	});	
 	app.delete('/friends/:friend_id',function(req,res) {
 		if(req.isAuthenticated()) {
 			var deleteUser=req.user.userid;
@@ -152,7 +162,7 @@ module.exports = function(app, passport) {
 		else res.redirect('/');
 	});
 	
-	app.get('/friends',function(req,res) {
+	app.get('/friends-json',function(req,res) {
 		if(req.isAuthenticated()) {
 			var friendnick = {};
 			var nick;

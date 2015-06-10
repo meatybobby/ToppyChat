@@ -6,6 +6,7 @@ $(function () {
 	
 	$('nav#friend-list a.friend-list-item').on('click', function(){
 		
+		$(this).removeClass('unread');
 		var friendName = $(this).prop('id').slice(3);
 		var str = $(this).find('.nickname').html();
 		var friendNick = str;

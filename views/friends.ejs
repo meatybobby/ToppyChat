@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Friends</title>
+    <% include /partials/head %>
+</head>
+<body>
+	<header>
+		<% include /partials/navbar %>
+	</header>
+<div class="container">
+
+    <div class="page-header text-center">
+        <h1><span class="glyphicon glyphicon-list-alt"></span> 好友管理</h1>
+    </div>
+	
+
+    <div class="row">
+
+        <!-- LOCAL INFORMATION -->
+        <div class="col-md-8 col-md-offset-2" >
+            <div class="well">
+                <table class="table friend-table">
+					<thead>
+						<tr>
+							<th>暱稱</th>
+							<th>刪除</th>
+						<tr>
+					</thead>
+					<tbody>
+						<% for(var i=0; i<user.friends.length; i++) { %>
+							<tr id="tr-<%= user.friends[i] %>">
+								<td id="nick_<%= user.friends[i] %>"></td>
+								<td><div class="delete-btn" id="d_<%= user.friends[i] %>"><span class="glyphicon glyphicon-remove-sign"></span></div></td>
+							</tr>
+						<% } %>
+					</tbody>
+				</table>
+
+            </div>
+        </div>
+
+    </div>
+
+</div>
+</body>
+</html>

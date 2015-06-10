@@ -1,6 +1,6 @@
 body{
 	font-family: "微軟正黑體";
-	/*font-size: 20px;*/
+	background: #E4F1FE;
 }
 #friendListArea{
 	
@@ -70,10 +70,11 @@ body{
 }
 .msg{
 	display: block;
-	width: 60%;
+	max-width: 60%;
+	clear: both;
 	margin-top: 10px;
 	margin-bottom: 5px;
-	position: relative;
+	
 }
 .you-msg{
 	/*font-weight: bold;
@@ -130,53 +131,63 @@ body{
 #addBtn{
 	width: 65px;
 }
-ul#friendList .friend-list-item{
+/*ul#friendList .friend-list-item{
 	-webkit-transition: background .15s;
 	transition: background .15s;
 }
 ul#friendList .friend-list-item:hover{
 	cursor: pointer;
 	background:#F5F5F5;
-}
+}*/
 .signal{ /*顯示有沒有在線上的圓圈*/
-	width: 10px;
-	height: 10px;
-	border-radius: 50%;
-	background: #F48FB1;
+	/*background: white;*/
+	color: #F48FB1;
 	display: inline-block;
-	/*float: right;*/
-	margin-left: 20px;
+	text-align: right;
+	float: right;
+	margin-right: 20px;
 }
 .signal.online{
-	background:#AED581;
+	color: #AED581;
 }
 .delete-btn{
 	display: inline-block;
-	background: #F64747;/*#BDC3C7;*/
+	background: #446CB3;/*#BDC3C7;*/
 	color: white;
-	padding: 2px 3px;
+	padding: 3px 10px;
 	border-radius: 3px;
 	cursor: pointer;
-	float: right;
 }
 .delete-btn:hover{
 	/*background: #D2D7D3;*/
 }
 .delete-btn:focus, .delete-btn:active{
 	margin-top: 2px;
+	margin-bottom: -2px;
 }
 ul.friendid li{
 	margin-top: 10px;
 	list-style: none;
 }
 .friend-table{
-	padding: 15px;
+	/*padding: 15px;
+	width: 100%;*/
 	
 }
+.friend-table th{
+	font-size: 20px;
+	/*text-align: left;*/
+	/*display: block;*/
+}
 .friend-list-item.unread{
-	background: #F1F8E9;
+	background: #674172;
+}
+.unread:hover{
+	background: #913D88;
 }
 .friend-list-title{
 	background: #4183D7;
 	color: white;
 }
+
+

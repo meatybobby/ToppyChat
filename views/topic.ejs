@@ -10,7 +10,7 @@
 	<header>
 		<% include /partials/navbar %>
 	</header>
-	<div class="container">
+	<div class="container main-body">
 		<div id="friendArea">
 			<nav class="cbp-spmenu cbp-spmenu-vertical cbp-spmenu-left" id="friend-list" style="overflow: auto">
 				<span class="glyphicon glyphicon-remove" id="close-friend-list"></span>
@@ -22,8 +22,7 @@
 						<a class="friend-list-item" id="li-<%= user.friends[i] %>">
 							<!--span class="friend"><%= user.friends[i] %></span-->
 							<span class="nickname"></span>
-							<div class="signal" id="signal-<%= user.friends[i] %>"></div>
-							<div class="delete-btn" id="d_<%= user.friends[i] %>">刪除</div>
+							<div class="signal" id="signal-<%= user.friends[i] %>"><i class="fa fa-circle"></i></div>
 						</a>
 				<% } } %>
 				<!--a href="#">Celery seakale</a>
@@ -77,7 +76,7 @@
 						<div id="createWrap">
 							<form id="createTopic" class="form-inline" role="form">
 								<input  id="inputTopic"  class="form-control" size="60" autocomplete="off"/>
-								<button type="submit" class="btn btn-warning">新增主題</button>
+								<button type="submit" class="btn btn-primary">新增主題</button>
 							</form>
 						</div>
 						

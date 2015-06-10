@@ -41,8 +41,9 @@ $(function () {
 		
 		$(this).addClass('active');
 	});*/
+	/**取得好友暱稱*/
 	$.ajax({
-		url: '/friends',
+		url: '/friends-json',
 		type: 'GET',
 		success: function(result) {
 			// Do something with the result
@@ -50,18 +51,21 @@ $(function () {
 			//console.log(result);
 			for(var i=0; i<result.length; i++) {
 				id_to_nick[result[i].userid] = result[i].nickname;
-				$('#li-'+result[i].userid+' .nickname').html(result[i].nickname);
+				$('#li-'+result[i].userid+' .nickname').html(result[i].nickname);//好友列表
+				$('td#nick_'+result[i].userid).html(result[i].nickname);//好友管理表格
 			}
 			//console.log(id_to_nick);
 		}			
 	});
 	
+	
+	/**刪除好友*/
 	$('.delete-btn').on('click', function(e){
 		e.stopPropagation();
 		e.preventDefault();
 		var id = $(this).prop('id').slice(2);
 		console.log("delete click!");
-		if(confirm('確定刪除 '+id+' ?')) {
+		if(confirm('確定刪除 '+id_to_nick[id]+' ?')) {
 			
 			$.ajax({
 				url: '/friends/'+id,
@@ -69,7 +73,8 @@ $(function () {
 				success: function(result) {
 					// Do something with the result
 					//alert('成功刪除!');
-					$('#li-'+id).hide(100, function(){
+					$('tr#tr-'+id).hide(100, function(){
+						console.log('hide tr');
 						$(this).remove();
 					});
 				}			
