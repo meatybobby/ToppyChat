@@ -33,7 +33,7 @@ $(function () {
 				if(data){
 					var $chatFriendBox = $('.chat-friend#' + friendName);
 					for(var i=0; i<data.length; i++){
-						var msg = escapeHtml(data[i].message);
+						var msg = /*escapeHtml*/(data[i].message);
 						//var item=$('<p class="triangle-isosceles left msg stranger-msg">' + msg + '</p>').hide().fadeIn(200);
 						var item;
 						if(data[i].sendid==friendName)

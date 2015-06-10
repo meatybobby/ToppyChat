@@ -157,7 +157,7 @@ module.exports = function(app, passport) {
 			var friendnick = {};
 			var nick;
 			var friends=req.user.friends;
-			findNick(0,friends,friendnick,res);
+			findNick(friends,friendnick,res);
 		}
 		else res.redirect('/');
 	});
@@ -210,19 +210,20 @@ function deleteFriend(deleteid,friendid,res,st) {
 	});
 }
 
-function findNick(i,friends,fnick,res) {
-	User.findOne({ 'userid' :  friends[i] }, function(err, user) {
+function findNick(friends,fnick,res) {
+	User.find({ 'userid' : { $in : friends } },{'userid':1,'nickname':1,'_id':0}, function(err, user) {
 		// if there are any errors, return the error before anything else
 		if (err) {
+			res.status(400).send('Error');
 			return;
 		}
 	
 		// if no user is found, return the message
 		else if (!user) {
+			res.status(400).send('Error');
 			return;
 		}
-		fnick[friends[i]]=user.nickname;
-		if(i!=friends.length-1) findNick(i+1,friends,fnick,res);
-		else res.status(200).send(fnick);
+		//console.log();
+		res.status(200).send(user);
 	});
 }
