@@ -5,9 +5,10 @@ var id_to_nick = {};
 $(function () {
 	
 	$('nav#friend-list a.friend-list-item').on('click', function(){
-		var str = $(this).find('.friend').html().toString();
-		var friendName = str.substr(1,str.length-2);
-		var friendNick = $(this).find('.nickname').html();
+		
+		var friendName = $(this).prop('id').slice(3);
+		var str = $(this).find('.nickname').html();
+		var friendNick = str;
 		//console.log(str);
 		//console.log(friendName);
 		
@@ -32,7 +33,7 @@ $(function () {
 			socket_ref.emit('read msg', friendName);/**未讀設成已讀*/
 			socket_ref.emit('get msg', friendName, function(data){
 				if(data){
-					console.log(data);
+					//console.log(data);
 					var $chatFriendBox = $('.chat-friend#' + friendName);
 					for(var i=0; i<data.length; i++){
 						var msg =  escapeHtml(data[i].message);

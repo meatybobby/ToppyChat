@@ -14,15 +14,14 @@
 		<div id="friendArea">
 			<nav class="cbp-spmenu cbp-spmenu-vertical cbp-spmenu-left" id="friend-list" style="overflow: auto">
 				<span class="glyphicon glyphicon-remove" id="close-friend-list"></span>
-				<h3>Friend</h3>
+				<h3>Friends</h3>
 				<% if(user.friends.length==0) { %>
 						<a>尚未加入任何好友</a>
 					<% } else { %>
 					<% for(var i=0; i<user.friends.length; i++) { %>
 						<a class="friend-list-item" id="li-<%= user.friends[i] %>">
+							<!--span class="friend"><%= user.friends[i] %></span-->
 							<span class="nickname"></span>
-							<span class="friend">(<%= user.friends[i] %>)</span>
-							
 							<div class="signal" id="signal-<%= user.friends[i] %>"></div>
 							<div class="delete-btn" id="d_<%= user.friends[i] %>">刪除</div>
 						</a>
@@ -40,7 +39,7 @@
 				<a href="#">Dandelion bunya</a>
 				<a href="#">Rutabaga</a-->
 			</nav>
-			<div id="show-friend"><span class="glyphicon glyphicon-user"></span> Friend</div>
+			<div id="show-friend"><!--span class="glyphicon glyphicon-user"></span--><i class="fa fa-chevron-right"></i></div>
 		</div>
 		<div class="row">
 			<!--old friend list-->
@@ -155,7 +154,7 @@
 				
 			});
 			socket.on('receive from friend', function(data){
-				$('ul#friendList li#li-' + data.id).trigger('click');
+				$('nav#friend-list a#li-' + data.id).trigger('click');
 				
 				var msgTxt = /*escapeHtml*/(data.msg);
 				//$('ul#friendList li#' + data.id)

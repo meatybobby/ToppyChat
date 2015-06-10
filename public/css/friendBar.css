@@ -54,7 +54,8 @@
 	display: inline-block;
 	left: 0;
 	cursor: pointer;
-	padding: 5px;
+	padding: 15px 10px;
+	opacity: .6;
 }
 #show-friend.open{
 	left: 240px;

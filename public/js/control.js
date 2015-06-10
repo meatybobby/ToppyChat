@@ -8,11 +8,11 @@ $(function () {
 		$('#friend-list').removeClass('cbp-spmenu-open');
 		$('#show-friend').removeClass('open').show();
 	});
-	/*$('*').not('#friend-list').not('#show-friend').click(function(){
+	$('.tab-content').on('click', function(){
 		console.log('other area clicked');
 		$('#friend-list').removeClass('cbp-spmenu-open');
 		$('#show-friend').removeClass('open').show();
-	});*/
+	});
 	/*$('#show-friend').on('click', function(e){
 		console.log('show friend clicked');
 		$.ajax({
