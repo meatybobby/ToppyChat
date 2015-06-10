@@ -84,7 +84,7 @@
   left:-50px; /* value = - border-left-width - border-right-width */
   bottom:auto;
   border-width:10px 50px 10px 0;
-  border-color:transparent #F1F8E9;/*#f3961c;*/
+  border-color:transparent #E1F5FE;/*#f3961c;*/
 }
 
 /* Variant : right
@@ -96,5 +96,5 @@
   bottom:auto;
   left:auto;
   border-width:10px 0 10px 50px;
-  border-color:transparent #E1F5FE;/*#f3961c;*/
+  border-color:transparent #0A9BDC;/*#f3961c;*/
 }
