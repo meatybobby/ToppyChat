@@ -74,18 +74,19 @@ body{
 	clear: both;
 	margin-top: 10px;
 	margin-bottom: 5px;
-	
+	word-wrap: break-word;
 }
 .you-msg{
 	/*font-weight: bold;
 	color: blue;*/
-	background: #E1F5FE;
+	background: #0A9BDC;/*#E1F5FE;*/
 	float: right;
+	color: white;
 }
 .stranger-msg{
 	/*font-weight: bold;
 	color:red;*/
-	background: #F1F8E9;
+	background: #E1F5FE;
 	float: left;
 }
 .leave-msg{
@@ -172,11 +173,12 @@ ul.friendid li{
 .friend-table{
 	/*padding: 15px;
 	width: 100%;*/
-	
+	text-align: center;
 }
 .friend-table th{
 	font-size: 20px;
-	/*text-align: left;*/
+	text-align: center;
+	/*text-align: left;
 	/*display: block;*/
 }
 .friend-list-item.unread{
