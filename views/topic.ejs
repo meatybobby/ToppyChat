@@ -138,7 +138,7 @@
 			});
 			$('.tab-content').on('click', '.chatWrap-friend .sendMsg-friend', function(e){
 				//console.log($(this).prop('id'));
-				var id = $(this).prop('id');
+				var id = $(this).prop('id').slice(5);
 				var $chatFriendBox = $(this).parent().parent().find('.chat-friend');
 				var $msgFriend = $(this).parent().find('#message-friend');
 				if($msgFriend.val()!=''){
@@ -155,14 +155,14 @@
 			socket.on('receive from friend', function(data){
 				$('nav#friend-list a#li-' + data.id).trigger('click');
 				
-				var msgTxt = /*escapeHtml*/(data.msg);
+				var msgTxt = escapeHtml(data.msg);
 				//$('ul#friendList li#' + data.id)
-				var $chatFriendBox = $('.chat-friend#' + data.id);
-				console.log($chatFriendBox);
+				var $chatFriendBox = $('.chat-friend#cbox-' + data.id);
+				//console.log($chatFriendBox);
 				var item=$('<p class="triangle-isosceles left msg stranger-msg">' + msgTxt + '</p>').hide().fadeIn(200);
 				$chatFriendBox.append(item);
 				scrollToBottom($chatFriendBox);
-				console.log('receive from friend id:' + data.id+'   msg: '+data.msg);
+				//console.log('receive from friend id:' + data.id+'   msg: '+data.msg);
 			});
 			$topicForm.submit(function(e){
 				e.preventDefault();
