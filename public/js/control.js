@@ -1,6 +1,7 @@
 var leaveConfirm = '確定離開並清除主題與聊天紀錄？';
 var topicOn = false;
 var quitBtnClicked = false;
+var navClicked = false;
 $(function () {
 	$('#show-friend').click(function(){
 		$(this).addClass('open').hide();
@@ -42,6 +43,7 @@ $(function () {
 	
 	var $topicLi = $('ul.nav.navbar-nav li#li-topic');
 	$('ul.nav.navbar-nav li a').click(function(e){
+		navClicked = true;
 		if($(this).prop('id')!='online-number' && $(this)!==$topicLi){
 			if(topic_opened()){
 				if(!confirm(leaveConfirm)) {
@@ -56,7 +58,7 @@ $(function () {
 		var chkevent = window.attachEvent ? 'onbeforeunload' : 'beforeunload'; /// make IE7, IE8 compatible
 
 		myEvent(chkevent, function(e) { // For >=IE7, Chrome, Firefox
-           if(topic_opened() && !quitBtnClicked){
+           if(topic_opened() && !quitBtnClicked && !navClicked){
 				var confirmationMessage = '有聊天還在進行，確定要離開並清除紀錄？';  // a space
 				(e || window.event).returnValue = confirmationMessage;
 				return confirmationMessage;
