@@ -15,13 +15,16 @@
 	<!-- Collect the nav links, forms, and other content for toggling -->
 	<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
 	  <ul class="nav navbar-nav">
-		<li class="<%- page_name == 'topic' ? 'active' : '' %>"><a href="/">開始聊天!</a></li>
+		<li id="li-topic" class="<%- page_name == 'topic' ? 'active' : '' %>"><a href="/">開始聊天!</a></li>
 		<li class="<%- page_name == 'friends' ? 'active' : '' %>"><a href="/friends">好友管理</a></li>
 		<!--li class="<%- page_name == 'about' ? 'active' : '' %>"><a href="#">關於</a></li-->
 		
 	  </ul>
 	  <ul class="nav navbar-nav navbar-right">
+		<%- page_name == 'topic' ? '<li><a id="online-number">在線人數：</a></li>' : '' %>
+		
 		<li class="<%- page_name == 'profile' ? 'active' : '' %>"><a href="/profile"><%= user.userid %>(<%= user.nickname%>)</a></li>
+		
 		<li><a href="/logout">登出</a></li>
 	  </ul>
 	</div><!-- /.navbar-collapse -->

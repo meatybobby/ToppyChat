@@ -1,4 +1,6 @@
-
+var leaveConfirm = '確定離開並清除主題與聊天紀錄？';
+var topicOn = false;
+var quitBtnClicked = false;
 $(function () {
 	$('#show-friend').click(function(){
 		$(this).addClass('open').hide();
@@ -9,7 +11,7 @@ $(function () {
 		$('#show-friend').removeClass('open').show();
 	});
 	$('.tab-content').on('click', function(){
-		console.log('other area clicked');
+		//console.log('other area clicked');
 		$('#friend-list').removeClass('cbp-spmenu-open');
 		$('#show-friend').removeClass('open').show();
 	});
@@ -31,12 +33,40 @@ $(function () {
 	
 	$('#quitBtn').click(function(){
 		//e.preventDefault();
-		if(confirm('Are you sure?')) {
+		quitBtnClicked = true;
+		if(confirm(leaveConfirm)) {
 			location.reload();
 		}
 		return false;
 	});
 	
+	var $topicLi = $('ul.nav.navbar-nav li#li-topic');
+	$('ul.nav.navbar-nav li a').click(function(e){
+		if($(this).prop('id')!='online-number' && $(this)!==$topicLi){
+			if(topic_opened()){
+				if(!confirm(leaveConfirm)) {
+					return false;
+				}
+			}
+		}
+		
+	});
+	//if(topic_opened()){
+		var myEvent = window.attachEvent || window.addEventListener;
+		var chkevent = window.attachEvent ? 'onbeforeunload' : 'beforeunload'; /// make IE7, IE8 compatible
+
+		myEvent(chkevent, function(e) { // For >=IE7, Chrome, Firefox
+           if(topic_opened() && !quitBtnClicked){
+				var confirmationMessage = '有聊天還在進行，確定要離開並清除紀錄？';  // a space
+				(e || window.event).returnValue = confirmationMessage;
+				return confirmationMessage;
+		   }
+		});
+	//}
+
+	function topic_opened(){
+		return $topicLi.hasClass('active') && topicOn;
+	}
 	/*$('ul.nav.navbar-nav li').click(function(){
 		
 		$(this).addClass('active');

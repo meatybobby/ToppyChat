@@ -68,7 +68,7 @@ $(function () {
 				inTabs.splice(idx, 1);
 				var rr = $(this).parent().parent().hasClass('active');
 				if(inTabs.length==0 || rr) {
-					console.log('all empty!');
+					//console.log('all empty!');
 						$('div#tab1').addClass('active');
 						$('div#tab1').addClass('in');
 						$('li#li1').addClass('active');
